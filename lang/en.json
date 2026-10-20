@@ -156,7 +156,7 @@
     "Handed to someone else": "Handed to someone else",
     "Handed to the recipient": "Handed to the recipient",
     "Handed to: :name": "Handed to: :name",
-    "Hello": "Hello",
+    "Hello, :name": "Hello, :name",
     "History": "History",
     "How many pool orders the courier may claim.": "How many pool orders the courier may claim.",
     "How to assign": "How to assign",

@@ -156,7 +156,7 @@
     "Handed to someone else": "Başka birine teslim ettim",
     "Handed to the recipient": "Alıcıya teslim ettim",
     "Handed to: :name": "Teslim alan: :name",
-    "Hello": "Merhaba",
+    "Hello, :name": "Merhaba, :name",
     "History": "Geçmiş",
     "How many pool orders the courier may claim.": "Kuryenin havuzdan alabileceği sipariş sayısı.",
     "How to assign": "Atama yöntemi",

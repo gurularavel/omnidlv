@@ -156,7 +156,7 @@
     "Handed to someone else": "Передал другому человеку",
     "Handed to the recipient": "Передал получателю",
     "Handed to: :name": "Получил: :name",
-    "Hello": "Здравствуйте",
+    "Hello, :name": "Здравствуйте, :name",
     "History": "История",
     "How many pool orders the courier may claim.": "Сколько заказов из пула курьер может взять.",
     "How to assign": "Способ назначения",

@@ -37,6 +37,22 @@ final class Phone
         }
     }
 
+    /** +994501234567 → "050 123 45 67" (national format), for reading at arm's length. */
+    public static function display(?string $e164): ?string
+    {
+        if ($e164 === null || $e164 === '') {
+            return $e164;
+        }
+
+        $util = PhoneNumberUtil::getInstance();
+
+        try {
+            return $util->format($util->parse($e164), PhoneNumberFormat::NATIONAL);
+        } catch (NumberParseException) {
+            return $e164;
+        }
+    }
+
     /** +994501234567 → +99450***4567, for public pages and archives. */
     public static function mask(?string $phone): ?string
     {

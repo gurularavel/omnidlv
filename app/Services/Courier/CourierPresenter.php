@@ -9,6 +9,7 @@ use App\Models\CourierShift;
 use App\Models\Task;
 use App\Models\User;
 use App\Support\CurrentCompany;
+use App\Support\Phone;
 use App\Support\Ui;
 
 /**
@@ -126,6 +127,7 @@ class CourierPresenter
             'target' => $this->side($t, $target),
             'from' => $this->side($t, $other),
             'phone' => $t->{"{$target}_phone"},
+            'phone_display' => Phone::display($t->{"{$target}_phone"}),
             'notes' => $t->notes,
             'recipient_notes' => $t->recipient_notes,
             'quantity' => $t->quantity,

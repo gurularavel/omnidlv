@@ -6,7 +6,7 @@ window.L = L;
 const BAKU = [40.4093, 49.8671];
 
 /** A Leaflet map in the transit world: tiles re-inked for midnight unless `porcelain`. */
-export function createMap(el, { center = BAKU, zoom = 12, porcelain = false } = {}) {
+export function createMap(el, { center = BAKU, zoom = 12, porcelain = false, controls = true } = {}) {
     const map = L.map(el, { zoomControl: false, attributionControl: true }).setView(center, zoom);
 
     L.tileLayer(window.OmniDLV?.tiles ?? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -14,7 +14,9 @@ export function createMap(el, { center = BAKU, zoom = 12, porcelain = false } = 
         attribution: window.OmniDLV?.attribution ?? '&copy; OpenStreetMap contributors',
     }).addTo(map);
 
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    if (controls) {
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+    }
 
     el.classList.add(porcelain ? 'map-porcelain' : 'map-night');
 

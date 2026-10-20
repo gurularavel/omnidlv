@@ -9,7 +9,7 @@
     ];
 @endphp
 <x-layouts::courier :title="$initial['code']">
-    <div x-data="courierTask(@js($initial), @js($labels))" x-cloak
+    <div x-data="courierTask(@js($initial), @js($labels))" x-cloak @keydown.escape.window="sheet === 'scan' ? closeScanner() : (sheet = null)"
          class="mx-auto flex min-h-screen max-w-[520px] flex-col pb-[calc(9rem+env(safe-area-inset-bottom))]">
 
         <header class="sticky top-0 z-20 flex items-center gap-3 border-b-[1.5px] border-[var(--outline)] bg-white/95 px-3 pb-3 pt-[max(.75rem,env(safe-area-inset-top))] backdrop-blur">
@@ -31,12 +31,12 @@
         {{-- Where and when --}}
         <section class="px-4 pt-5">
             <div class="flex items-baseline gap-3">
-                <span class="t-display" :class="{ 'text-[var(--danger-text)]': t.urgency === 'late', 'text-ink-amber': t.urgency === 'risk' }" x-text="t.minutes_label"></span>
+                <span class="t-display" :class="{ 'text-[var(--danger-text)]': t.urgency === 'late', 'text-[var(--risk-text)]': t.urgency === 'risk' }" x-text="t.minutes_label"></span>
                 <span class="t-label" x-text="t.final ? @js(__('finished')) : (t.urgency === 'late' ? @js(__('min late')) : @js(__('min left')))"></span>
                 <span class="ml-auto text-[var(--text-2)]" x-text="t.window"></span>
             </div>
-            <h1 class="t-value mt-4" x-text="t.target.name || '—'"></h1>
-            <p class="mt-1 text-[16px]" x-text="t.target.address"></p>
+            <h1 class="t-display mt-4 uppercase leading-[1.05]" x-text="t.target.address"></h1>
+            <p class="mt-2 text-[16px]"><span x-text="t.target.name || '—'"></span><span x-show="t.phone" class="tabular-nums text-[var(--text-2)]" x-text="' · ' + t.phone_display"></span></p>
             <p class="text-[var(--text-2)]" x-text="[t.target.building && @js(__('bldg')) + ' ' + t.target.building, t.target.floor && @js(__('floor')) + ' ' + t.target.floor, t.target.apartment && @js(__('apt')) + ' ' + t.target.apartment].filter(Boolean).join(' · ')"></p>
             <p x-show="t.target.description" class="mt-2 rounded-md bg-[var(--surface-hover)] p-3 text-[var(--text-2)]" x-text="t.target.description"></p>
 
@@ -132,8 +132,11 @@
         {{-- Bottom sheets --}}
         <div x-show="sheet" x-transition.opacity class="fixed inset-0 z-40 bg-night-950/50" @click="sheet = null"></div>
 
-        <div x-show="sheet === 'complete'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="complete-title">
-            <h2 id="complete-title" class="t-title mb-4">{{ __('How was it handed over?') }}</h2>
+        <div x-show="sheet === 'complete'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[520px] rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="complete-title">
+            <div class="mb-4 flex items-start gap-3">
+                <h2 id="complete-title" class="t-title flex-1">{{ __('How was it handed over?') }}</h2>
+                <button type="button" class="-mr-2 -mt-2 grid size-11 shrink-0 place-items-center" @click="sheet = null" aria-label="{{ __('Close') }}"><x-icon name="x" :size="20" /></button>
+            </div>
             <div class="flex flex-col gap-2">
                 <template x-for="(label, slug) in labels.completeOptions" :key="slug">
                     <label class="flex min-h-14 items-center gap-3 rounded-[var(--radius-plate)] border-[1.5px] px-4" :class="outcome === slug ? 'border-[var(--text)]' : 'border-[var(--outline)]'">
@@ -145,21 +148,28 @@
             </div>
         </div>
 
-        <div x-show="sheet === 'fail'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="fail-title">
-            <h2 id="fail-title" class="t-title mb-4">{{ __('Why could it not be delivered?') }}</h2>
+        <div x-show="sheet === 'fail'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[520px] rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="fail-title">
+            <div class="mb-4 flex items-start gap-3">
+                <h2 id="fail-title" class="t-title flex-1">{{ __('Why could it not be delivered?') }}</h2>
+                <button type="button" class="-mr-2 -mt-2 grid size-11 shrink-0 place-items-center" @click="sheet = null" aria-label="{{ __('Close') }}"><x-icon name="x" :size="20" /></button>
+            </div>
             <div class="flex flex-col gap-2">
                 <template x-for="(label, slug) in labels.failOptions" :key="slug">
                     <label class="flex min-h-12 items-center gap-3 rounded-[var(--radius-plate)] border-[1.5px] px-4" :class="reason === slug ? 'border-[var(--text)]' : 'border-[var(--outline)]'">
                         <input type="radio" name="reason" :value="slug" x-model="reason" class="size-5 accent-[#0b1230]"><span x-text="label"></span>
                     </label>
                 </template>
-                <textarea x-model="notes" class="input" maxlength="255" placeholder="{{ __('Note for the dispatcher') }}"></textarea>
+                <label for="fail-notes" class="t-label mt-2">{{ __('Note for the dispatcher') }}</label>
+                <textarea id="fail-notes" x-model="notes" class="input" maxlength="255"></textarea>
                 <button type="button" class="btn btn-danger mt-2 h-14" :disabled="busy || !reason" @click="fail()">{{ __('Report the problem') }}</button>
             </div>
         </div>
 
-        <div x-show="sheet === 'signature'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="sig-title">
-            <h2 id="sig-title" class="t-title mb-3">{{ __('Recipient signature') }}</h2>
+        <div x-show="sheet === 'signature'" x-transition.origin.bottom class="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[520px] rounded-t-2xl bg-white px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5" role="dialog" aria-modal="true" aria-labelledby="sig-title">
+            <div class="mb-3 flex items-start gap-3">
+                <h2 id="sig-title" class="t-title flex-1">{{ __('Recipient signature') }}</h2>
+                <button type="button" class="-mr-2 -mt-2 grid size-11 shrink-0 place-items-center" @click="sheet = null" aria-label="{{ __('Close') }}"><x-icon name="x" :size="20" /></button>
+            </div>
             <canvas x-ref="sig" class="h-[220px] w-full touch-none rounded-[var(--radius-plate)] border-[1.5px] border-dashed border-[var(--hairline-strong)]"></canvas>
             <div class="mt-3 grid grid-cols-2 gap-3">
                 <button type="button" class="btn h-12" @click="pad?.clear()">{{ __('Clear') }}</button>

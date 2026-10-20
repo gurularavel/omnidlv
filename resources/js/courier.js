@@ -256,9 +256,12 @@ Alpine.data('courierBoard', (initial, labels) => {
 
             if (mapEl !== el) {
                 map?.remove();
-                map = createMap(el, { porcelain: true, zoom: 14 });
+                // A glance strip, not a map to operate: no controls, no gestures.
+                map = createMap(el, { porcelain: true, zoom: 14, controls: false });
                 map.dragging.disable();
                 map.scrollWheelZoom.disable();
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
                 layer = L.layerGroup().addTo(map);
                 mapEl = el;
             }
@@ -276,7 +279,7 @@ Alpine.data('courierBoard', (initial, labels) => {
                 points.push(me);
             }
             station(stop, ink, { surface: '#ffffff' }).addTo(layer);
-            map.fitBounds(L.latLngBounds(points), { padding: [28, 28], maxZoom: 15 });
+            map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [32, 32], paddingBottomRight: [44, 36], maxZoom: 15 });
             setTimeout(() => map.invalidateSize(), 50);
         },
     };

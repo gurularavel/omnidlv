@@ -28,8 +28,7 @@
 
         {{-- Off shift --}}
         <section x-show="!b.shift.active" class="flex flex-1 flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-10">
-            <p class="t-label">{{ __('Hello') }}</p>
-            <h1 class="t-display mt-1 uppercase" x-text="b.courier.name.split(' ')[0]"></h1>
+            <h1 class="t-display uppercase" x-text="@js(__('Hello, :name', ['name' => '__NAME__'])).replace('__NAME__', b.courier.name.split(' ')[0])"></h1>
             <p class="mt-3 text-[16px] text-[var(--text-2)]" x-text="b.counts.active ? @js(__('Orders waiting for you:')) + ' ' + b.counts.active : @js(__('Start your shift to receive orders.'))"></p>
             <p class="mt-1 text-[16px] text-[var(--text-3)]" x-show="b.counts.delivered" x-text="@js(__('Delivered today:')) + ' ' + b.counts.delivered"></p>
             <button type="button" class="btn btn-primary mt-auto h-16 text-[16px]" :disabled="busy" @click="shift(true)">{{ __('Start shift') }}<x-icon name="arrow-right" :size="20" /></button>
@@ -40,14 +39,16 @@
         <template x-if="b.shift.active && n">
             <div class="flex flex-1 flex-col pb-[calc(10.5rem+env(safe-area-inset-bottom))]">
                 <section class="px-5 pt-4">
-                    <p class="t-label"><span x-text="n.category === 'assigned' && n.type === 'drop_off' ? @js(__('Pick up first')) : @js(__('Next stop'))"></span> · <span class="t-code" x-text="n.code"></span></p>
-                    <p class="mt-2 flex items-baseline gap-2">
-                        <span class="t-hero" :class="{ 'text-[var(--danger-text)]': n.urgency === 'late', 'text-ink-amber': n.urgency === 'risk' }" x-text="n.minutes_label"></span>
+                    <p class="flex flex-wrap items-baseline gap-x-2">
+                        <span class="t-hero" :class="{ 'text-[var(--danger-text)]': n.urgency === 'late', 'text-[var(--risk-text)]': n.urgency === 'risk' }" x-text="n.minutes_label"></span>
                         <span class="t-label text-[14px]" x-text="n.urgency === 'late' ? @js(__('min late')) : @js(__('min left'))"></span>
+                        {{-- A drop-off still at the pickup step goes to the hub first; say so where the time is. --}}
+                        <span x-show="n.category === 'assigned' && n.type === 'drop_off'" class="tag h-7 border-[var(--text)] px-2 text-[13px] text-[var(--text)]">{{ __('Pick up first') }}</span>
                     </p>
                     <h1 class="t-display mt-4 uppercase leading-[1.05]" x-text="n.target.address"></h1>
                     <p class="mt-1 text-[16px] text-[var(--text-2)]" x-text="[n.target.building && @js(__('bldg')) + ' ' + n.target.building, n.target.floor && @js(__('floor')) + ' ' + n.target.floor, n.target.apartment && @js(__('apt')) + ' ' + n.target.apartment].filter(Boolean).join(' · ')"></p>
-                    <p class="mt-2 text-[16px]"><span x-text="n.target.name"></span><span x-show="n.phone" class="text-[var(--text-2)]" x-text="' · ' + n.phone"></span></p>
+                    <p class="mt-2 text-[16px]"><span x-text="n.target.name"></span><span x-show="n.phone" class="text-[var(--text-2)] tabular-nums" x-text="' · ' + n.phone_display"></span></p>
+                    <p class="t-code mt-1 text-[13px] text-[var(--text-3)]" x-text="n.code"></p>
                     <p x-show="n.target.description" class="mt-2 rounded-md bg-[var(--surface-hover)] p-3 text-[16px] text-[var(--text-2)]" x-text="n.target.description"></p>
                 </section>
 
@@ -76,7 +77,7 @@
             <ul class="mt-6 flex flex-col gap-3">
                 <template x-for="p in b.pool" :key="p.id">
                     <li class="plate flex items-center gap-4 p-4">
-                        <span class="t-value w-12" :class="{ 'text-[var(--danger-text)]': p.urgency === 'late', 'text-ink-amber': p.urgency === 'risk' }" x-text="p.minutes_label"></span>
+                        <span class="t-value w-12" :class="{ 'text-[var(--danger-text)]': p.urgency === 'late', 'text-[var(--risk-text)]': p.urgency === 'risk' }" x-text="p.minutes_label"></span>
                         <span class="min-w-0 flex-1"><span class="block truncate font-medium" x-text="p.address"></span><span class="text-[14px] text-[var(--text-2)]" x-text="p.window"></span></span>
                         <button type="button" class="btn h-12" :disabled="busy" @click="claim(p)">{{ __('Take') }}</button>
                     </li>
@@ -97,7 +98,7 @@
                     <span class="relative flex h-4 flex-1 items-center" :style="`color:${b.courier.ink}`" aria-hidden="true">
                         <span class="absolute inset-x-0 h-[5px] rounded-full" :style="`background:${b.courier.ink}`"></span>
                         <span class="relative flex w-full justify-between">
-                            <template x-for="s in b.active.slice(0, 8)" :key="s.id">
+                            <template x-for="s in b.active.slice(1, 9)" :key="s.id">
                                 <span class="station size-3.5 border-[3px] bg-white" :style="s.urgency === 'late' ? 'box-shadow:0 0 0 2px #fff,0 0 0 4px #e21d2d' : ''"></span>
                             </template>
                         </span>
@@ -130,7 +131,7 @@
                             <span class="block text-[14px] text-[var(--text-2)]" x-text="[s.name, s.status].filter(Boolean).join(' · ')"></span>
                         </a>
                         <span class="text-right">
-                            <span class="t-value block" :class="{ 'text-[var(--danger-text)]': s.urgency === 'late' && tab !== 'done', 'text-ink-amber': s.urgency === 'risk' && tab !== 'done' }" x-text="s.minutes_label"></span>
+                            <span class="t-value block" :class="{ 'text-[var(--danger-text)]': s.urgency === 'late' && tab !== 'done', 'text-[var(--risk-text)]': s.urgency === 'risk' && tab !== 'done' }" x-text="s.minutes_label"></span>
                             <button type="button" x-show="tab === 'pool'" class="btn btn-sm mt-1 h-10" :disabled="busy" @click="claim(s)">{{ __('Take') }}</button>
                         </span>
                     </li>

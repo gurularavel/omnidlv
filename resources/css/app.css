@@ -71,6 +71,7 @@
         --action: var(--color-ink-scarlet);
         --focus: var(--color-ink-amber);
         --danger-text: var(--color-ink-scarlet-text);
+        --risk-text: var(--color-ink-amber);
         color-scheme: dark;
     }
 
@@ -86,6 +87,8 @@
         --outline: #c9cfdb;
         --focus: var(--color-ink-cobalt);
         --danger-text: #c8102e;
+        /* Amber itself is ~1.6:1 on white; this darkened amber reads in sunlight (≈5.9:1). */
+        --risk-text: #8a5d00;
         color-scheme: light;
     }
 
