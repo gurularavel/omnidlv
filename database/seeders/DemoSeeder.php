@@ -73,7 +73,7 @@ class DemoSeeder extends Seeder
 
         $teamService = app(TeamService::class);
         $teams = [
-            $teamService->save(new Team, ['name' => 'Mərkəz', 'hub_id' => $central->id, 'color' => '#e21d2d',
+            $teamService->save(new Team, ['name' => 'Mərkəz', 'hub_id' => $central->id, 'color' => '#16b3a5',
                 'polygon' => [[40.365, 49.83], [40.365, 49.885], [40.395, 49.885], [40.395, 49.83]]]),
             $teamService->save(new Team, ['name' => 'Şərq', 'hub_id' => $central->id, 'color' => '#2f6bff',
                 'polygon' => [[40.38, 49.885], [40.38, 49.96], [40.44, 49.96], [40.44, 49.885]]]),

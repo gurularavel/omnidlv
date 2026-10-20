@@ -9,7 +9,7 @@
 </head>
 <body class="theme-porcelain flex min-h-full flex-col items-center justify-center gap-4 px-6 text-center">
     <span class="interchange" aria-hidden="true"></span>
-    <h1 class="t-title text-[24px]">{{ __('Courier app') }}</h1>
+    <h1 class="t-title">{{ __('Courier app') }}</h1>
     <p class="max-w-[36ch] text-[var(--text-2)]">{{ __('The courier app with SMS sign-in, navigation and proof of delivery is coming in the next release.') }}</p>
 </body>
 </html>

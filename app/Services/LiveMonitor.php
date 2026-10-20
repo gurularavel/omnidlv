@@ -113,7 +113,7 @@ class LiveMonitor
     private function attention(?int $hubId): array
     {
         return Task::query()
-            ->with(['status', 'courier:id,name'])
+            ->with(['status', 'courier:id,name', 'courier.teams:id,color'])
             ->when($hubId, fn ($q) => $q->where('hub_id', $hubId))
             ->open()
             ->where(fn ($q) => $q
@@ -147,6 +147,8 @@ class LiveMonitor
                     'status_form' => Ui::statusStyle($t->status_category_slug)['form'],
                     'status_ink' => Ui::statusStyle($t->status_category_slug)['ink'],
                     'courier' => $t->courier?->name,
+                    // Links the exception to its line on the map; null when nobody holds it.
+                    'courier_ink' => $t->courier ? Ui::courierInk($t->courier) : null,
                     'url' => route('tasks.show', $t),
                 ];
             })

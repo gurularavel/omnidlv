@@ -4,7 +4,7 @@
     $urgency = \App\Support\Ui::urgency($left);
 @endphp
 <span {{ $attributes->class([
-    't-display text-[22px] tabular-nums',
+    't-value tabular-nums',
     'text-[var(--danger-text)]' => $urgency === 'late',
     'text-ink-amber' => $urgency === 'risk',
     'text-[var(--text-3)]' => $final,

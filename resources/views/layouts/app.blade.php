@@ -31,12 +31,12 @@
     {{-- Navigation rail --}}
     <div x-show="nav" x-cloak x-transition.opacity class="fixed inset-0 z-30 bg-night-950/70 lg:hidden" @click="nav = false"></div>
     <nav aria-label="{{ __('Main') }}"
-         class="fixed inset-y-0 left-0 z-40 flex w-[236px] -translate-x-full flex-col border-r-[1.5px] border-[var(--hairline)] bg-night-900 px-3 py-5 transition-transform duration-300 ease-[var(--ease-out-expo)] lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
+         class="fixed inset-y-0 left-0 z-40 flex w-[236px] -translate-x-full flex-col border-r-[1.5px] border-[var(--outline)] bg-night-900 px-3 py-5 transition-transform duration-300 ease-[var(--ease-out-expo)] lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
          :class="nav && 'translate-x-0'">
         <a href="{{ route('dashboard') }}" class="mb-7 flex items-center gap-3 px-2">
             <span class="interchange" aria-hidden="true"></span>
             <span>
-                <span class="block font-display text-[22px] font-bold leading-none tracking-[0.04em]">OMNIDLV</span>
+                <span class="block font-display text-[20px] font-bold leading-none tracking-[0.04em]">OMNIDLV</span>
                 <span class="t-label mt-1 block text-[10px] text-[var(--text-3)]">{{ Str::limit($currentCompany->name, 24) }}</span>
             </span>
         </a>
@@ -70,7 +70,7 @@
             </div>
             <div class="rule"></div>
             <div x-data="clock(@js($currentCompany->timezone))">
-                <span class="t-display block text-[26px]" x-text="time">{{ now($currentCompany->timezone)->format('H:i') }}</span>
+                <span class="t-value block" x-text="time">{{ now($currentCompany->timezone)->format('H:i') }}</span>
                 <span class="t-label text-[10px] text-[var(--text-3)]">{{ __('Local time') }} · {{ $currentCompany->timezone }}</span>
             </div>
             <div class="rule"></div>
@@ -88,7 +88,7 @@
     </nav>
 
     <div class="flex min-w-0 flex-1 flex-col">
-        <header class="app-header sticky top-0 z-20 flex h-16 items-center gap-4 border-b-[1.5px] border-[var(--hairline)] bg-night-900/95 px-4 backdrop-blur-sm lg:px-7">
+        <header class="app-header sticky top-0 z-20 flex h-16 items-center gap-4 border-b-[1.5px] border-[var(--outline)] bg-night-900/95 px-4 backdrop-blur-sm lg:px-7">
             <button class="btn btn-ghost btn-icon lg:hidden" @click="nav = true" aria-label="{{ __('Open menu') }}"><x-icon name="menu" /></button>
             <h1 class="t-title truncate">{{ $title }}</h1>
             <div class="ml-auto flex items-center gap-2">

@@ -9,8 +9,12 @@ use Illuminate\Support\Carbon;
 /** Presentation rules shared by the panel, courier app and tracking page. */
 final class Ui
 {
-    /** The world's line inks, assigned to teams/couriers as route identity. */
-    public const INKS = ['#e21d2d', '#2f6bff', '#ffc20e', '#22b14c', '#16b3a5', '#9b6bff'];
+    /**
+     * Line inks for teams/couriers as route identity. Scarlet and amber are deliberately absent:
+     * scarlet means action or late/failed and amber means at risk, so a line colour never reads
+     * as an alarm. Lateness on a line is shown by form (a scarlet-ringed station), not by ink.
+     */
+    public const INKS = ['#2f6bff', '#22b14c', '#16b3a5', '#9b6bff'];
 
     public static function ink(?int $id): string
     {
@@ -30,20 +34,20 @@ final class Ui
     }
 
     /**
-     * Line form per category, so status reads without colour: dashed = waiting,
-     * solid = moving, double = failed, struck = cancelled.
+     * Status carries its meaning in line form, not hue: dashed = waiting, solid = moving or
+     * done, double = failed, struck = cancelled. Hue is kept for three jobs only — courier
+     * identity (INKS), scarlet for late/failed and amber for at risk — so a status dash never
+     * shares a colour, and a meaning, with a courier's line or an alarm.
      *
      * @return array{form: string, ink: string}
      */
     public static function statusStyle(StatusCategory $category): array
     {
+        $neutral = '#c3c9da';
+
         return match ($category) {
-            StatusCategory::Created => ['form' => 'dashed', 'ink' => '#8e99b8'],
-            StatusCategory::Pool => ['form' => 'dashed', 'ink' => '#9b6bff'],
-            StatusCategory::Assigned => ['form' => 'solid', 'ink' => '#2f6bff'],
-            StatusCategory::InProgress => ['form' => 'solid', 'ink' => '#ffc20e'],
-            StatusCategory::OnDelivery => ['form' => 'solid', 'ink' => '#16b3a5'],
-            StatusCategory::Completed => ['form' => 'solid', 'ink' => '#22b14c'],
+            StatusCategory::Created, StatusCategory::Pool => ['form' => 'dashed', 'ink' => $neutral],
+            StatusCategory::Assigned, StatusCategory::InProgress, StatusCategory::OnDelivery, StatusCategory::Completed => ['form' => 'solid', 'ink' => $neutral],
             StatusCategory::Cancelled => ['form' => 'struck', 'ink' => '#8e99b8'],
             StatusCategory::Failed => ['form' => 'double', 'ink' => '#e21d2d'],
         };

@@ -16,8 +16,22 @@ export function createMap(el, { center = BAKU, zoom = 12, porcelain = false } = 
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+    el.classList.add(porcelain ? 'map-porcelain' : 'map-night');
+
     if (!porcelain) {
-        el.classList.add('map-night');
+        // Enamel tint: a world-sized rectangle in its own pane between tiles (200) and
+        // overlays (400). Being a sibling of the tile pane inside the map pane, its
+        // `mix-blend-mode: color` (app.css) actually blends with the tiles, unlike a blend
+        // set on the tile pane, which Leaflet's transformed pane isolates.
+        map.createPane('enamel').style.zIndex = 250;
+        L.rectangle([[-85, -180], [85, 180]], {
+            pane: 'enamel',
+            renderer: L.svg({ pane: 'enamel', padding: 1 }),
+            stroke: false,
+            fillColor: '#24388a',
+            fillOpacity: 1,
+            interactive: false,
+        }).addTo(map);
     }
 
     return map;

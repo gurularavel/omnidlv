@@ -27,9 +27,9 @@
     {{-- Headline: identity, state, time left --}}
     <div class="mb-6 flex flex-wrap items-end gap-x-10 gap-y-4 border-b-[1.5px] border-[var(--hairline)] pb-6">
         <div>
-            <p class="t-label mb-2">{{ $task->type_slug->label() }} · {{ $task->hub->name }}</p>
-            <p class="t-display text-[40px] tracking-[0.04em]">{{ $task->tracking_code }}</p>
+            <p class="t-display tracking-[0.04em]">{{ $task->tracking_code }}</p>
             <p class="mt-2 text-[var(--text-2)]">
+                {{ $task->type_slug->label() }} · {{ $task->hub->name }} ·
                 @if ($task->integration_id)<span>#{{ $task->integration_id }} · </span>@endif
                 {{ __('Created :time via :channel', ['time' => Ui::localTime($task->created_at, 'd M H:i'), 'channel' => __('channels.'.$task->channel->value)]) }}
                 @if ($task->owner) · {{ $task->owner->name }} @endif
@@ -37,15 +37,15 @@
         </div>
         <div>
             <p class="t-label mb-2">{{ __('Status') }}</p>
-            <x-status :category="$category" :label="$task->status->label()" class="text-[18px]" />
+            <x-status :category="$category" :label="$task->status->label()" class="t-value" />
         </div>
         <div>
             <p class="t-label mb-2">{{ $task->isFinal() ? __('Finished') : __('Minutes left') }}</p>
-            <x-minutes :ends-at="$task->isFinal() ? $task->ended_at : $task->ends_at" :final="$task->isFinal()" class="text-[32px]" />
+            <x-minutes :ends-at="$task->isFinal() ? $task->ended_at : $task->ends_at" :final="$task->isFinal()" class="t-display" />
         </div>
         <div>
             <p class="t-label mb-2">{{ __('Window') }}</p>
-            <p class="text-[18px]">{{ Ui::localTime($task->starts_at, 'd M H:i') }} – {{ Ui::localTime($task->ends_at) }}</p>
+            <p class="t-value">{{ Ui::localTime($task->starts_at, 'd M H:i') }} – {{ Ui::localTime($task->ends_at) }}</p>
         </div>
         @if ($task->is_locked)
             <span class="tag ml-auto h-7 gap-1.5 border-ink-amber/70 text-ink-amber"><x-icon name="lock" :size="14" />{{ __('Locked for the courier') }}</span>
@@ -67,7 +67,7 @@
                 <section class="plate">
                     <div class="plate-head"><h2 class="t-label text-[var(--text)]">{{ __('Recipient') }}</h2></div>
                     <dl class="grid gap-4 p-5">
-                        <div><dt class="t-label">{{ __('Name') }}</dt><dd class="mt-1 text-[16px]">{{ $task->destination_name ?? '—' }}</dd></div>
+                        <div><dt class="t-label">{{ __('Name') }}</dt><dd class="t-value mt-1">{{ $task->destination_name ?? '—' }}</dd></div>
                         <div><dt class="t-label">{{ __('Phone') }}</dt>
                             <dd class="mt-1">@if ($task->destination_phone)<a href="tel:{{ $task->destination_phone }}" class="inline-flex items-center gap-2 hover:underline"><x-icon name="phone" :size="15" />{{ $task->destination_phone }}</a>@else — @endif</dd></div>
                         <div><dt class="t-label">{{ __('Address') }}</dt>
@@ -93,7 +93,7 @@
                         <div class="col-span-2"><dt class="t-label">{{ __('Requirements') }}</dt>
                             <dd class="mt-2 flex flex-wrap gap-2">@forelse ($requirements as $r)<span class="tag">{{ $r }}</span>@empty<span class="text-[var(--text-3)]">{{ __('None') }}</span>@endforelse</dd></div>
                         @if ($task->requires_delivery_code && $task->delivery_code)
-                            <div class="col-span-2"><dt class="t-label">{{ __('Delivery code') }}</dt><dd class="t-display mt-1 text-[24px] tracking-[0.3em]">{{ $task->delivery_code }}</dd></div>
+                            <div class="col-span-2"><dt class="t-label">{{ __('Delivery code') }}</dt><dd class="t-display mt-1 tracking-[0.3em]">{{ $task->delivery_code }}</dd></div>
                         @endif
                         @if ($task->tags)
                             <div class="col-span-2"><dt class="t-label">{{ __('Tags') }}</dt><dd class="mt-2 flex flex-wrap gap-2">@foreach ($task->tags as $tag)<span class="tag">{{ $tag }}</span>@endforeach</dd></div>

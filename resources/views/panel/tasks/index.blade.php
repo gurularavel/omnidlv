@@ -14,7 +14,7 @@
         <a href="{{ route('tasks.create') }}" class="btn btn-primary"><x-icon name="plus" :size="16" />{{ __('New task') }}</a>
     </x-slot:actions>
 
-    <nav class="scroll-strip -mx-1 mb-5 flex gap-1 overflow-x-auto border-b-[1.5px] border-[var(--hairline)]" aria-label="{{ __('Task views') }}">
+    <nav class="-mx-1 mb-5 flex flex-wrap gap-x-1 border-b-[1.5px] border-[var(--outline)]" aria-label="{{ __('Task views') }}">
         <a href="{{ route('tasks.index', collect($filters)->except(['status_category_slug', 'page'])->all()) }}"
            class="nav-link" @if ($current === null) aria-current="page" @endif>{{ __('All') }}</a>
         @foreach ($tabs as [$key, $label, $value])
@@ -39,7 +39,8 @@
                 <option value="{{ $id }}" @selected(($filters['courier_id'] ?? '') == $id)>{{ $name }}</option>
             @endforeach
         </select>
-        <input type="date" name="date" value="{{ $filters['date'] ?? '' }}" class="input" aria-label="{{ __('Deadline date') }}">
+        <input type="text" name="date" value="{{ $filters['date'] ?? '' }}" class="input" inputmode="numeric" autocomplete="off"
+               placeholder="{{ __('Deadline: dd.mm.yyyy') }}" aria-label="{{ __('Deadline date') }}">
         <div class="flex gap-2">
             <button class="btn"><x-icon name="filter" :size="16" />{{ __('Filter') }}</button>
             @if ($hasFilters)
@@ -66,7 +67,27 @@
                 </x-empty>
             @endif
         @else
-            <div class="overflow-x-auto">
+            {{-- Phones: one stacked row per task, nothing clipped. --}}
+            <ul class="sm:hidden">
+                @foreach ($tasks as $task)
+                    <li class="border-b border-[var(--hairline)] last:border-0">
+                        <a href="{{ route('tasks.show', $task) }}" class="grid grid-cols-[56px_minmax(0,1fr)] gap-x-4 px-4 py-3.5 hover:bg-[var(--surface-hover)]">
+                            <x-minutes :ends-at="$task->ends_at" :final="$task->isFinal()" />
+                            <span class="min-w-0">
+                                <span class="t-code block">{{ $task->tracking_code }}</span>
+                                <span class="block truncate">{{ $task->destination_name ?? '—' }}</span>
+                                <span class="block truncate text-[13px] text-[var(--text-2)]">{{ $task->destination_address }}</span>
+                                <span class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[var(--text-3)]">
+                                    <x-status :category="$task->status_category_slug" :label="$task->status->label()" class="text-[12px]" />
+                                    @if ($task->courier)<span>{{ $task->courier->name }}</span>@endif
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+
+            <div class="hidden overflow-x-auto sm:block">
                 <table class="tbl min-w-[980px]">
                     <thead>
                     <tr>

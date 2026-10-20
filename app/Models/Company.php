@@ -29,7 +29,8 @@ class Company extends Model implements AuthenticatableContract
         'locale' => 'az',
         'country' => 'AZ',
         'currency' => 'AZN',
-        'primary_color' => '#e21d2d',
+        // Cobalt, not scarlet: on the tracking page scarlet is reserved for failed deliveries.
+        'primary_color' => '#2f6bff',
         'secondary_color' => '#0b1230',
         'plan_slug' => 'start',
         'settings' => '{}',

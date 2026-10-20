@@ -43,11 +43,11 @@
     </header>
 
     <section class="mb-4">
-        <p class="t-label mb-1">{{ $t['type_slug'] === 'pickup' ? __('Your pickup') : __('Your order') }}</p>
-        <h1 class="font-display text-[34px] font-bold uppercase leading-none tracking-[0.02em]" @if ($problem) style="color:#c8102e" @endif>{{ $t['status']['name'] }}</h1>
+        <h1 class="t-display uppercase" @if ($problem) style="color:#c8102e" @endif>{{ $t['status']['name'] }}</h1>
+        @if ($t['type_slug'] === 'pickup')<p class="mt-2 text-[var(--text-2)]">{{ __('Your pickup') }}</p>@endif
         @if ($t['status']['description'])<p class="mt-2 text-[var(--text-2)]">{{ $t['status']['description'] }}</p>@endif
         @unless ($t['is_final'])
-            <p class="mt-2 text-[16px]">{{ __('Expected by :time', ['time' => $fmt($t['ends_at'])]) }}</p>
+            <p class="t-value mt-2">{{ __('Expected by :time', ['time' => $fmt($t['ends_at'])]) }}</p>
         @endunless
     </section>
 
@@ -95,7 +95,7 @@
 
     @if ($t['can_rate'])
         <section class="plate p-4" x-data="{ rating: 0 }">
-            <h2 class="t-title text-[16px]">{{ __('How was the delivery?') }}</h2>
+            <h2 class="t-title">{{ __('How was the delivery?') }}</h2>
             <form method="POST" action="{{ route('tracking.rate', $t['tracking_code']) }}" class="mt-3 flex flex-col gap-3">
                 @csrf
                 <input type="hidden" name="rating" :value="rating">

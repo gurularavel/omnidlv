@@ -66,6 +66,8 @@
         --text-3: var(--color-porcelain-mute);
         --hairline: color-mix(in oklab, var(--color-porcelain) 18%, transparent);
         --hairline-strong: color-mix(in oklab, var(--color-porcelain) 42%, transparent);
+        /* Panel and rail outlines: porcelain line, as on the enamel mural. Rows keep --hairline. */
+        --outline: color-mix(in oklab, var(--color-porcelain-dim) 36%, transparent);
         --action: var(--color-ink-scarlet);
         --focus: var(--color-ink-amber);
         --danger-text: var(--color-ink-scarlet-text);
@@ -81,6 +83,7 @@
         --text-3: #5d6782;
         --hairline: var(--color-line);
         --hairline-strong: #8f98b0;
+        --outline: #c9cfdb;
         --focus: var(--color-ink-cobalt);
         --danger-text: #c8102e;
         color-scheme: light;
@@ -162,12 +165,22 @@
         line-height: 1.2;
     }
 
+    /* Display numerals and identity lines: 32 for the headline of a view, 20 (.t-value) for
+       values and list numerals. With .t-label (12) and body (14) that is the whole scale. */
     .t-display {
         font-family: var(--font-display);
         font-weight: 700;
         font-size: 32px;
         line-height: 1;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
+    }
+
+    .t-value {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 1.15;
+        letter-spacing: 0.02em;
     }
 
     .t-code {
@@ -178,7 +191,7 @@
 
     .plate {
         background: var(--surface-raised);
-        border: 1.5px solid var(--hairline);
+        border: 1.5px solid var(--outline);
         border-radius: var(--radius-plate);
     }
 
@@ -494,14 +507,32 @@
     }
 }
 
-/* Leaflet on midnight: OSM tiles are re-inked into the enamel instead of shipping a second basemap. */
-.map-night .leaflet-tile-pane {
-    filter: invert(1) hue-rotate(200deg) brightness(1.05) contrast(0.82) saturate(0.4);
+/*
+ | Leaflet on midnight: OSM tiles are re-inked into the enamel instead of shipping a second
+ | basemap. Invert + greyscale keeps only the street luminance; the enamel pane above the tiles
+ | (map.js) blends with `color`, so the ground lands in the #0b1230 family with streets as faint
+ | blue-grey hairlines and the courier inks carry the picture.
+ */
+.map-night.leaflet-container {
+    /* The enamel itself: tiles not yet loaded show the same ground, not a flash of colour. */
+    background: var(--color-night-900);
+    font-family: var(--font-sans);
 }
 
-.map-night.leaflet-container {
-    background: var(--color-night-950);
-    font-family: var(--font-sans);
+.map-night .leaflet-tile-pane {
+    filter: invert(1) grayscale(1) brightness(0.9) contrast(1.15);
+}
+
+/* Takes hue and saturation from the enamel, luminance from the tiles beneath (see map.js). */
+.map-night .leaflet-enamel-pane {
+    mix-blend-mode: color;
+    pointer-events: none;
+}
+
+/* Porcelain variant (tracking page): quiet the basemap so the brand ink is the only colour. */
+.map-porcelain .leaflet-tile-pane {
+    filter: grayscale(0.9) contrast(0.92) brightness(1.04);
+    opacity: 0.85;
 }
 
 .leaflet-container .leaflet-control-attribution {
