@@ -175,6 +175,15 @@
         letter-spacing: 0.02em;
     }
 
+    /* Courier app only: the next stop's minutes, read at arm's length in sunlight. */
+    .t-hero {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 56px;
+        line-height: 0.95;
+        letter-spacing: 0.01em;
+    }
+
     .t-value {
         font-family: var(--font-display);
         font-weight: 600;
@@ -549,6 +558,12 @@
     background: var(--surface-raised);
     color: var(--text);
     border-color: var(--hairline);
+}
+
+/* Leaflet panes use z-index up to 1000; isolate each map so they never rise above sticky
+   headers, drawers or sheets on the page. */
+.leaflet-container {
+    isolation: isolate;
 }
 
 /* Horizontal strips (tabs, status board) scroll by swipe; the bar itself is noise. */

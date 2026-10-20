@@ -125,6 +125,33 @@
                 </section>
             </div>
 
+            @if ($task->pods->isNotEmpty() || $task->delivery_code_verified_at || $task->recipient_name_at_handover)
+                <section class="plate">
+                    <div class="plate-head"><h2 class="t-label text-[var(--text)]">{{ __('Proof of delivery') }}</h2></div>
+                    <div class="flex flex-col gap-4 p-5">
+                        <div class="flex flex-wrap gap-x-8 gap-y-2 text-[var(--text-2)]">
+                            @if ($task->delivery_code_verified_at)
+                                <span class="flex items-center gap-2"><x-icon name="check" :size="16" class="text-ink-green-text" />{{ __('Code confirmed at :time', ['time' => Ui::localTime($task->delivery_code_verified_at)]) }}</span>
+                            @endif
+                            @if ($task->recipient_name_at_handover)
+                                <span>{{ __('Handed to: :name', ['name' => $task->recipient_name_at_handover]) }}</span>
+                            @endif
+                        </div>
+                        @if ($task->pods->isNotEmpty())
+                            <div class="flex flex-wrap gap-3">
+                                @foreach ($task->pods as $pod)
+                                    <a href="{{ $pod->url() }}" target="_blank" rel="noopener" class="group block">
+                                        <img src="{{ $pod->url() }}" alt="{{ $pod->type === 'signature' ? __('Signature') : __('Proof photo') }}" loading="lazy"
+                                             @class(['h-36 w-48 rounded-md border border-[var(--outline)] object-cover', 'bg-white object-contain p-2' => $pod->type === 'signature'])>
+                                        <span class="t-label mt-1 block text-[11px]">{{ $pod->type === 'signature' ? __('Signature') : __('Photo') }} · {{ Ui::localTime($pod->taken_at) }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </section>
+            @endif
+
             {{-- Journey: the status history as a vertical line with stations. --}}
             <section class="plate">
                 <div class="plate-head"><h2 class="t-label text-[var(--text)]">{{ __('Journey') }}</h2></div>

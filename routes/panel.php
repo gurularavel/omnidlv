@@ -3,6 +3,10 @@
 use App\Enums\Role;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\Courier\AppController as CourierAppController;
+use App\Http\Controllers\Courier\AuthController as CourierAuthController;
+use App\Http\Controllers\Panel\PodController;
+use App\Http\Controllers\Panel\SmsLogController;
 use App\Http\Controllers\Panel\CourierController;
 use App\Http\Controllers\Panel\DashboardController;
 use App\Http\Controllers\Panel\HubController;
@@ -51,13 +55,42 @@ Route::prefix('app')->middleware(['auth', 'tenant', $staff])->group(function () 
         Route::post('integration/keys', [IntegrationController::class, 'store'])->name('integration.keys.store');
         Route::delete('integration/keys/{token}', [IntegrationController::class, 'destroy'])->name('integration.keys.destroy');
 
+        Route::get('sms', SmsLogController::class)->name('sms.index');
+
         Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
     });
 });
 
-// Courier PWA (phase 4). Routes are named now so the panel can link to them.
+// Courier PWA: SMS-code sign-in, then a mobile app whose actions are JSON endpoints.
 Route::prefix('courier')->name('courier.')->group(function () {
-    Route::view('login', 'courier.login')->middleware('guest')->name('login');
-    Route::view('/', 'courier.login')->middleware('auth')->name('home');
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [CourierAuthController::class, 'phone'])->name('login');
+        Route::post('login', [CourierAuthController::class, 'sendCode'])->middleware('throttle:otp')->name('login.send');
+        Route::get('login/code', [CourierAuthController::class, 'verifyForm'])->name('verify');
+        Route::post('login/code', [CourierAuthController::class, 'verify'])->middleware('throttle:10,1')->name('verify.submit');
+    });
+
+    Route::middleware(['auth', 'tenant', EnsureRole::using(Role::Courier)])->group(function () {
+        Route::get('/', [CourierAppController::class, 'home'])->name('home');
+        Route::get('data', [CourierAppController::class, 'data'])->name('data');
+        Route::post('shift/start', [CourierAppController::class, 'startShift'])->name('shift.start');
+        Route::post('shift/end', [CourierAppController::class, 'endShift'])->name('shift.end');
+        Route::post('location', [CourierAppController::class, 'location'])->middleware('throttle:30,1')->name('location');
+
+        Route::get('tasks/{task}', [CourierAppController::class, 'show'])->name('task');
+        Route::get('tasks/{task}/data', [CourierAppController::class, 'taskData'])->name('task.data');
+        Route::post('tasks/{task}/step', [CourierAppController::class, 'step'])->name('task.step');
+        Route::post('tasks/{task}/complete', [CourierAppController::class, 'complete'])->name('task.complete');
+        Route::post('tasks/{task}/fail', [CourierAppController::class, 'fail'])->name('task.fail');
+        Route::post('tasks/{task}/claim', [CourierAppController::class, 'claim'])->name('task.claim');
+        Route::post('tasks/{task}/code', [CourierAppController::class, 'code'])->middleware('throttle:20,1')->name('task.code');
+        Route::post('tasks/{task}/pod', [CourierAppController::class, 'pod'])->name('task.pod');
+        Route::post('tasks/{task}/scan', [CourierAppController::class, 'scan'])->name('task.scan');
+    });
+
+    Route::post('logout', [CourierAuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
+
+// Proof-of-delivery files: signed, short-lived links for signed-in staff or the courier.
+Route::get('pods/{pod}', PodController::class)->middleware(['auth', 'tenant', 'signed'])->name('pods.show');

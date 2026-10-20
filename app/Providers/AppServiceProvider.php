@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Geocoding\FakeGeocoder;
 use App\Services\Geocoding\Geocoder;
 use App\Services\Geocoding\NominatimGeocoder;
+use App\Services\Sms\SmsDriver;
 use App\Support\CurrentCompany;
 use App\View\Components\Icon;
 use Illuminate\Support\Facades\Blade;
@@ -20,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped(CurrentCompany::class);
+
+        $this->app->singleton(SmsDriver::class, function ($app) {
+            $driver = config('services.sms.driver');
+            $class = config("services.sms.drivers.{$driver}") ?? throw new \InvalidArgumentException("Unknown SMS driver [{$driver}].");
+
+            return $app->make($class);
+        });
 
         $this->app->singleton(Geocoder::class, function () {
             $config = config('services.geocoder');

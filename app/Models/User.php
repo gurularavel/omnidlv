@@ -111,4 +111,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CourierShift::class);
     }
+
+    public function locationPings(): HasMany
+    {
+        return $this->hasMany(CourierLocationPing::class);
+    }
 }

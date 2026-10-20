@@ -9,6 +9,7 @@
     ];
     $admin = [
         ['integration.keys', 'plug', __('Integration'), 'integration.*'],
+        ['sms.index', 'message-square-text', __('SMS log'), 'sms.*'],
         ['settings.edit', 'settings-2', __('Settings'), 'settings.*'],
     ];
     $canManage = $currentRole?->canManage();

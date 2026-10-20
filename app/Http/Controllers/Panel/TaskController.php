@@ -74,7 +74,7 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        $task->load(['status', 'courier.courierDetail', 'courier.teams:id,color', 'hub', 'team', 'items', 'statusLogs.status', 'statusLogs.user:id,name', 'owner:id,name']);
+        $task->load(['status', 'courier.courierDetail', 'courier.teams:id,color', 'hub', 'team', 'items', 'statusLogs.status', 'statusLogs.user:id,name', 'owner:id,name', 'pods']);
 
         return view('panel.tasks.show', [
             'task' => $task,

@@ -43,6 +43,8 @@ class Task extends Model
             'claimed_at' => 'datetime',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
+            'delivery_code_sent_at' => 'datetime',
+            'delivery_code_verified_at' => 'datetime',
             'origin_lat' => 'float',
             'origin_lng' => 'float',
             'destination_lat' => 'float',
@@ -101,6 +103,11 @@ class Task extends Model
     public function items(): HasMany
     {
         return $this->hasMany(TaskItem::class);
+    }
+
+    public function pods(): HasMany
+    {
+        return $this->hasMany(TaskPod::class);
     }
 
     public function statusLogs(): HasMany

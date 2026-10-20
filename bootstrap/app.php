@@ -39,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: SetTenantFromToken::class);
 
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('courier', 'courier/*') ? route('courier.login') : route('login'));
-        $middleware->redirectUsersTo(fn () => route('dashboard'));
+        $middleware->redirectUsersTo(fn (Request $request) => $request->user()?->isCourier() ? route('courier.home') : route('dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -42,6 +42,16 @@ return [
         'attribution' => env('MAP_ATTRIBUTION', '&copy; OpenStreetMap contributors'),
     ],
 
+    // SMS: "demo" sends nothing and only logs (panel → SMS log). A real provider such as
+    // Postgöyərçini is added as a class implementing App\Services\Sms\SmsDriver and listed here.
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'demo'),
+        'drivers' => [
+            'demo' => App\Services\Sms\DemoSmsDriver::class,
+        ],
+        'sender' => env('SMS_SENDER', 'OmniDLV'),
+    ],
+
     'geocoder' => [
         'driver' => env('GEOCODER', 'nominatim'),
         'nominatim_url' => env('NOMINATIM_URL', 'https://nominatim.openstreetmap.org'),

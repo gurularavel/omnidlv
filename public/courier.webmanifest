@@ -1,0 +1,16 @@
+{
+    "name": "OmniDLV Kuryer",
+    "short_name": "Kuryer",
+    "description": "OmniDLV kuryer tətbiqi: marşrut, status, çatdırılma sübutu.",
+    "start_url": "/courier",
+    "scope": "/courier",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "lang": "az",
+    "icons": [
+        { "src": "/icons/courier.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+        { "src": "/icons/courier-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    ]
+}
