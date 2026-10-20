@@ -76,11 +76,47 @@
     "assignment": { "type": "pool" }
   }'</pre>
                 </div>
-                <ul class="flex flex-col gap-2 text-[13px] text-[var(--text-2)]">
+                <ul class="flex flex-col gap-2 text-[14px] text-[var(--text-2)]">
                     <li class="flex gap-2"><x-icon name="check" :size="15" class="mt-0.5 shrink-0 text-ink-green" />{{ __('Times without a timezone are read as UTC.') }}</li>
                     <li class="flex gap-2"><x-icon name="check" :size="15" class="mt-0.5 shrink-0 text-ink-green" />{{ __('Sending the same order number twice returns 409 with the existing task, so retries are safe.') }}</li>
                     <li class="flex gap-2"><x-icon name="check" :size="15" class="mt-0.5 shrink-0 text-ink-green" />{{ __('GET /statuses lists every status id you can send to /task-status.') }}</li>
                 </ul>
+            </div>
+        </section>
+
+        {{-- Recipient tracking: what a shop shows its own customers. --}}
+        <section class="plate xl:col-span-2">
+            <div class="plate-head"><h2 class="t-label text-[var(--text)]">{{ __('Recipient tracking') }}</h2></div>
+            <div class="grid gap-6 p-5 lg:grid-cols-3">
+                <div class="flex flex-col gap-2">
+                    <p class="t-label">{{ __('1. Send the link') }}</p>
+                    <p class="text-[var(--text-2)]">{{ __('Every task in the API response carries tracking_code and tracking_url. Put the link in your order email or SMS.') }}</p>
+                    <code class="t-code block rounded-md border border-[var(--hairline)] bg-night-950 px-3 py-2 text-[13px]">"tracking_url": "{{ url('/t/OD7KQ2MXR4PA9C') }}"</code>
+                    <p class="text-[var(--text-2)]">{{ __('Recipients without the link type the code here:') }}
+                        <a href="{{ route('tracking.lookup') }}" target="_blank" rel="noopener" class="text-[var(--text)] underline">{{ route('tracking.lookup') }}</a></p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p class="t-label">{{ __('2. Show it on your site') }}</p>
+                    <p class="text-[var(--text-2)]">{{ __('Embed the tracking page in your order page. embed=1 hides our header and footer.') }}</p>
+                    <pre class="overflow-x-auto rounded-md border border-[var(--hairline)] bg-night-950 p-3 font-mono text-[12px] leading-relaxed text-[var(--text-2)]">&lt;iframe src="{{ url('/t/OD7KQ2MXR4PA9C') }}?embed=1"
+        style="width:100%;height:720px;border:0"&gt;&lt;/iframe&gt;
+
+&lt;!-- or a search box for any order --&gt;
+&lt;iframe src="{{ route('tracking.lookup') }}?embed=1"
+        style="width:100%;height:520px;border:0"&gt;&lt;/iframe&gt;</pre>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p class="t-label">{{ __('3. Or read the status yourself') }}</p>
+                    <p class="text-[var(--text-2)]">{{ __('A public endpoint, no API key, open to browsers (CORS). Names and phones come back masked.') }}</p>
+                    <pre class="overflow-x-auto rounded-md border border-[var(--hairline)] bg-night-950 p-3 font-mono text-[12px] leading-relaxed text-[var(--text-2)]">GET {{ url('/api/tracking') }}?code=OD7KQ2MXR4PA9C
+
+GET {{ url('/api/tracking') }}?order=ORD-1001&amp;phone=4567
+
+→ status.category: created | pool | assigned |
+  in_progress | on_delivery | completed |
+  cancelled | failed</pre>
+                    <p class="text-[13px] text-[var(--text-3)]">{{ __('Limits: 30 code lookups and 10 order lookups per minute per IP.') }}</p>
+                </div>
             </div>
         </section>
     </div>

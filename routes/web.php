@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Route;
 // The marketing site is its own surface (built later); until then the root opens the panel.
 Route::redirect('/', '/app')->name('home');
 
+// Public order tracking. /track is where a recipient types a code; /t/{code} is the link sent by SMS.
+Route::get('track', [TrackingPageController::class, 'lookup'])
+    ->middleware('throttle:tracking-lookup')
+    ->name('tracking.lookup');
+
 Route::get('t/{code}', [TrackingPageController::class, 'show'])
     ->middleware('throttle:tracking')
     ->name('tracking.show');

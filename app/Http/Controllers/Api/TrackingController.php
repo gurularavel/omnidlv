@@ -16,8 +16,15 @@ class TrackingController extends Controller
      */
     public function show(Request $request)
     {
-        $data = $request->validate(['code' => ['required', 'string', 'max:64']]);
-        $task = $this->tracking->find($data['code']);
+        $data = $request->validate([
+            'code' => ['required_without:order', 'nullable', 'string', 'max:64'],
+            'order' => ['nullable', 'string', 'max:191'],
+            'phone' => ['required_with:order', 'nullable', 'string', 'max:20'],
+        ]);
+
+        $task = filled($data['code'] ?? null)
+            ? $this->tracking->find($data['code'])
+            : $this->tracking->findByOrder($data['order'], $data['phone']);
 
         if ($task === null) {
             return response()->json(['message' => __('tracking.not_found')], 404);

@@ -55,6 +55,11 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('tracking', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
 
+        // Searching by order number + phone digits is guessable in principle, so it gets less room.
+        RateLimiter::for('tracking-lookup', fn (Request $request) => $request->filled('order')
+            ? [Limit::perMinute(10)->by('order:'.$request->ip()), Limit::perHour(60)->by('order-h:'.$request->ip())]
+            : Limit::perMinute(30)->by('code:'.$request->ip()));
+
         RateLimiter::for('otp', fn (Request $request) => [
             Limit::perMinute(3)->by('otp:'.$request->input('phone')),
             Limit::perHour(20)->by('otp-ip:'.$request->ip()),

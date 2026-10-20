@@ -10,7 +10,8 @@ use App\Http\Controllers\Api\TrackingController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('tracking', [TrackingController::class, 'show'])->middleware('throttle:tracking')->name('api.tracking');
+// Public, no key: by tracking code, or by order number + last 4 phone digits (stricter limit).
+Route::get('tracking', [TrackingController::class, 'show'])->middleware('throttle:tracking-lookup')->name('api.tracking');
 
 /*
  | QDelivery-compatible integration API: same paths and payloads under /api/integration,

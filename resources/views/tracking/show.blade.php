@@ -115,7 +115,12 @@
         <p class="text-center text-[var(--text-2)]">{{ __('Thank you for your feedback.') }}</p>
     @endif
 
-    <footer class="mt-auto pt-8 text-center text-[12px] text-[var(--text-3)]">{{ __('Delivery tracking by') }} OmniDLV</footer>
+    <footer class="mt-auto flex flex-col items-center gap-3 pt-8 text-center">
+        <a href="{{ route('tracking.lookup', array_filter(['embed' => ($embed ?? false) ? 1 : null])) }}" class="btn btn-ghost">{{ __('Track another order') }}</a>
+        @unless ($embed ?? false)
+            <span class="text-[12px] text-[var(--text-3)]">{{ __('Delivery tracking by') }} OmniDLV</span>
+        @endunless
+    </footer>
 </div>
 </body>
 </html>

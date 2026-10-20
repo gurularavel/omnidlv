@@ -18,9 +18,38 @@ class TrackingService
     {
         return Task::withoutGlobalScopes()
             ->with(['company', 'status', 'courier.courierLocation', 'statusLogs.status'])
-            ->where('tracking_code', strtoupper(trim($code)))
+            ->where('tracking_code', self::normalizeCode($code))
             ->whereNull('deleted_at')
             ->first();
+    }
+
+    /**
+     * Recipients who lost the code can find an order by the shop's order number, proven by the
+     * last four digits of the phone it was sent to. Order numbers are not secret, so the phone
+     * check is what keeps strangers out; the route is throttled against guessing.
+     */
+    public function findByOrder(string $orderNumber, string $phoneLast4): ?Task
+    {
+        $digits = preg_replace('/\D/', '', $phoneLast4);
+
+        if (strlen($digits) !== 4 || trim($orderNumber) === '') {
+            return null;
+        }
+
+        $task = Task::withoutGlobalScopes()
+            ->where('integration_id', trim($orderNumber))
+            ->where('destination_phone', 'like', '%'.$digits)
+            ->whereNull('deleted_at')
+            ->latest('id')
+            ->first();
+
+        return $task ? $this->find($task->tracking_code) : null;
+    }
+
+    /** People type codes with spaces, dashes and lower case; codes are only A–Z and 2–9. */
+    public static function normalizeCode(string $code): string
+    {
+        return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $code));
     }
 
     public function present(Task $task): array
