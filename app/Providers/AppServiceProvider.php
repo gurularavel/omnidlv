@@ -6,6 +6,8 @@ use App\Services\Geocoding\FakeGeocoder;
 use App\Services\Geocoding\Geocoder;
 use App\Services\Geocoding\NominatimGeocoder;
 use App\Support\CurrentCompany;
+use App\View\Components\Icon;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -35,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
         Model::preventSilentlyDiscardingAttributes(! $this->app->isProduction());
 
         JsonResource::withoutWrapping();
+
+        Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');
+        Blade::component('icon', Icon::class);
 
         RateLimiter::for('integration', function (Request $request) {
             return Limit::perMinute(600)->by('company:'.($request->user()?->getAuthIdentifier() ?? $request->ip()));

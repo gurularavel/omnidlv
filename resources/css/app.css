@@ -1,9 +1,590 @@
 @import 'tailwindcss';
+@import '@fontsource/fira-sans/400.css';
+@import '@fontsource/fira-sans/500.css';
+@import '@fontsource/fira-sans/600.css';
+@import '@fontsource/fira-sans-condensed/500.css';
+@import '@fontsource/fira-sans-condensed/600.css';
+@import '@fontsource/fira-sans-condensed/700.css';
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet-draw/dist/leaflet.draw.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+@custom-variant dark (&:where(.theme-night, .theme-night *));
+
+/*
+ | Midnight transit world. The panel runs on midnight enamel; the courier app and the
+ | tracking page use the porcelain variant (.theme-porcelain) for sunlight. Both share
+ | the four line inks and the transit sans.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Fira Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Fira Sans Condensed', 'Fira Sans', ui-sans-serif, sans-serif;
+
+    --color-night-950: #070c20;
+    --color-night-900: #0b1230;
+    --color-night-850: #0f1939;
+    --color-night-800: #152147;
+    --color-night-700: #1f2d5a;
+    --color-night-600: #33447a;
+    --color-night-500: #4d5f97;
+
+    --color-porcelain: #f4f2ec;
+    --color-porcelain-dim: #c3c9da;
+    --color-porcelain-mute: #8e99b8;
+
+    --color-ink-scarlet: #e21d2d;
+    --color-ink-cobalt: #2f6bff;
+    --color-ink-amber: #ffc20e;
+    --color-ink-green: #22b14c;
+    --color-ink-teal: #16b3a5;
+    --color-ink-violet: #9b6bff;
+
+    /* Ink tints legible as text on midnight. */
+    --color-ink-scarlet-text: #ff6b6b;
+    --color-ink-cobalt-text: #86a8ff;
+    --color-ink-green-text: #5fd98a;
+
+    --color-paper: #ffffff;
+    --color-paper-2: #f3f4f7;
+    --color-line: #d8dce6;
+    --color-ink-900: #0b1230;
+    --color-ink-600: #45506e;
+
+    --radius-plate: 10px;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+    :root {
+        --surface: var(--color-night-900);
+        --surface-raised: var(--color-night-850);
+        --surface-hover: var(--color-night-800);
+        --text: var(--color-porcelain);
+        --text-2: var(--color-porcelain-dim);
+        --text-3: var(--color-porcelain-mute);
+        --hairline: color-mix(in oklab, var(--color-porcelain) 18%, transparent);
+        --hairline-strong: color-mix(in oklab, var(--color-porcelain) 42%, transparent);
+        --action: var(--color-ink-scarlet);
+        --focus: var(--color-ink-amber);
+        --danger-text: var(--color-ink-scarlet-text);
+        color-scheme: dark;
+    }
+
+    .theme-porcelain {
+        --surface: var(--color-paper);
+        --surface-raised: var(--color-paper);
+        --surface-hover: var(--color-paper-2);
+        --text: var(--color-ink-900);
+        --text-2: var(--color-ink-600);
+        --text-3: #5d6782;
+        --hairline: var(--color-line);
+        --hairline-strong: #8f98b0;
+        --focus: var(--color-ink-cobalt);
+        --danger-text: #c8102e;
+        color-scheme: light;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        background: var(--surface);
+        color: var(--text);
+        font-family: var(--font-sans);
+        font-size: 14px;
+        line-height: 1.5;
+        font-variant-numeric: tabular-nums;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+        background: color-mix(in oklab, var(--color-ink-cobalt) 55%, transparent);
+        color: #fff;
+    }
+
+    input, textarea {
+        caret-color: var(--color-ink-amber);
+    }
+
+    .theme-porcelain input, .theme-porcelain textarea {
+        caret-color: var(--color-ink-cobalt);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    a {
+        text-underline-offset: 3px;
+    }
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-night-600) transparent;
+    }
+
+    .theme-porcelain * {
+        scrollbar-color: #b9c0d0 transparent;
+    }
+
+    h1, h2, h3 {
+        text-wrap: balance;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    /* Type: three steps do the work — label (12), body (14), title (20) — plus display numerals. */
+    .t-label {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-2);
+    }
+
+    .t-title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        line-height: 1.2;
+    }
+
+    .t-display {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 1;
+        letter-spacing: 0.01em;
+    }
+
+    .t-code {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: 0.06em;
+    }
+
+    .plate {
+        background: var(--surface-raised);
+        border: 1.5px solid var(--hairline);
+        border-radius: var(--radius-plate);
+    }
+
+    .plate-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--hairline);
+    }
+
+    .rule {
+        border-top: 1px solid var(--hairline);
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 38px;
+        padding: 0 16px;
+        border-radius: 6px;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        border: 1.5px solid var(--hairline-strong);
+        color: var(--text);
+        transition: background-color 160ms var(--ease-out-expo), border-color 160ms var(--ease-out-expo), transform 120ms var(--ease-out-expo);
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background: var(--surface-hover);
+        border-color: var(--text);
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    .btn:disabled, .btn[aria-disabled='true'] {
+        opacity: 0.45;
+        pointer-events: none;
+    }
+
+    .btn-primary {
+        background: var(--action);
+        border-color: var(--action);
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: color-mix(in oklab, var(--action) 86%, black);
+        border-color: color-mix(in oklab, var(--action) 86%, black);
+    }
+
+    .btn-ghost {
+        border-color: transparent;
+    }
+
+    .btn-sm {
+        height: 30px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .btn-icon {
+        width: 38px;
+        padding: 0;
+    }
+
+    .btn-danger {
+        border-color: color-mix(in oklab, var(--color-ink-scarlet) 70%, transparent);
+        color: var(--danger-text);
+    }
+
+    .field-label {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .input {
+        width: 100%;
+        height: 40px;
+        padding: 0 12px;
+        border-radius: 6px;
+        background: var(--surface);
+        border: 1.5px solid var(--hairline-strong);
+        color: var(--text);
+        font: inherit;
+        transition: border-color 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+    }
+
+    textarea.input {
+        height: auto;
+        min-height: 84px;
+        padding: 10px 12px;
+        resize: vertical;
+    }
+
+    select.input {
+        appearance: none;
+        padding-right: 34px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3c9da' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+
+    .theme-porcelain select.input {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2345506e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    }
+
+    .input::placeholder {
+        color: var(--text-3);
+    }
+
+    .input:hover {
+        border-color: var(--text-2);
+    }
+
+    .input:focus {
+        outline: none;
+        border-color: var(--color-ink-cobalt-text);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ink-cobalt) 30%, transparent);
+    }
+
+    .input[aria-invalid='true'] {
+        border-color: var(--color-ink-scarlet);
+    }
+
+    .field-error {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--danger-text);
+    }
+
+    .check {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1.5px solid var(--hairline-strong);
+        display: inline-grid;
+        place-content: center;
+        flex: none;
+        cursor: pointer;
+    }
+
+    .check:checked {
+        background: var(--color-ink-cobalt);
+        border-color: var(--color-ink-cobalt);
+    }
+
+    .check:checked::after {
+        content: '';
+        width: 9px;
+        height: 5px;
+        border: 2px solid #fff;
+        border-top: 0;
+        border-right: 0;
+        transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .tbl {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tbl th {
+        text-align: left;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--hairline-strong);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-2);
+        white-space: nowrap;
+    }
+
+    .tbl td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--hairline);
+        vertical-align: middle;
+    }
+
+    .tbl tbody tr {
+        transition: background-color 120ms;
+    }
+
+    .tbl tbody tr:hover {
+        background: var(--surface-hover);
+    }
+
+    /* Station tick: the transit symbol for a stop. Filled = served, ring = upcoming. */
+    .station {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        border: 3px solid currentColor;
+        background: var(--surface);
+        flex: none;
+    }
+
+    .station.is-done {
+        background: currentColor;
+    }
+
+    .interchange {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        border: 4px solid var(--text);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px var(--surface);
+        flex: none;
+    }
+
+    /* Status carries meaning in line form as well as hue (readable without colour). */
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    /* The glyph is a short line segment drawn with backgrounds: solid, dashed or double. */
+    .status::before {
+        content: '';
+        flex: none;
+        width: 18px;
+        height: 3px;
+        background: var(--status-ink, currentColor);
+    }
+
+    .status[data-form='dashed']::before {
+        background: repeating-linear-gradient(90deg, var(--status-ink) 0 4px, transparent 4px 7px);
+    }
+
+    .status[data-form='double']::before {
+        height: 7px;
+        background: linear-gradient(var(--status-ink) 0 2px, transparent 2px 5px, var(--status-ink) 5px 7px);
+    }
+
+    .status[data-form='struck'] {
+        text-decoration: line-through;
+        text-decoration-thickness: 1.5px;
+        color: var(--text-3);
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 4px;
+        border: 1px solid var(--hairline-strong);
+        font-size: 12px;
+        color: var(--text-2);
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 40px;
+        padding: 0 12px;
+        border-radius: 6px;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-2);
+        position: relative;
+        transition: color 160ms, background-color 160ms;
+    }
+
+    .nav-link:hover {
+        color: var(--text);
+        background: var(--surface-hover);
+    }
+
+    .nav-link[aria-current='page'] {
+        color: var(--text);
+    }
+
+    .nav-link[aria-current='page']::after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 3px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--action);
+    }
+
+    .flash {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1.5px solid var(--hairline-strong);
+        background: var(--surface-raised);
+    }
+}
+
+/* Leaflet on midnight: OSM tiles are re-inked into the enamel instead of shipping a second basemap. */
+.map-night .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(200deg) brightness(1.05) contrast(0.82) saturate(0.4);
+}
+
+.map-night.leaflet-container {
+    background: var(--color-night-950);
+    font-family: var(--font-sans);
+}
+
+.leaflet-container .leaflet-control-attribution {
+    background: color-mix(in oklab, var(--surface) 80%, transparent);
+    color: var(--text-3);
+    font-size: 11px;
+}
+
+.leaflet-container .leaflet-control-attribution a {
+    color: var(--text-2);
+}
+
+.leaflet-bar a, .leaflet-bar a:hover {
+    background: var(--surface-raised);
+    color: var(--text);
+    border-color: var(--hairline);
+}
+
+/* Horizontal strips (tabs, status board) scroll by swipe; the bar itself is noise. */
+.scroll-strip {
+    scrollbar-width: none;
+}
+
+.scroll-strip::-webkit-scrollbar {
+    display: none;
+}
+
+/* On phones the header's primary action collapses to its icon so the page title keeps its room. */
+@media (max-width: 639px) {
+    .app-header .btn-primary {
+        width: 38px;
+        padding: 0;
+        gap: 0;
+        font-size: 0;
+    }
+}
+
+/* leaflet-draw's sprite is dark glyphs: give its buttons a porcelain plate so they read on midnight. */
+.leaflet-draw-toolbar a,
+.leaflet-draw-toolbar a:hover {
+    background-color: var(--color-porcelain);
+    border-color: var(--color-night-600);
+}
+
+.leaflet-draw-actions a {
+    background: var(--color-night-800);
+    color: var(--color-porcelain);
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+}
+
+:root:not(.theme-porcelain) .input::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(0.9);
+    cursor: pointer;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: var(--surface-raised);
+    color: var(--text);
+    border: 1px solid var(--hairline-strong);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+}
+
+.leaflet-tooltip.transit-label {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-shadow: 0 0 3px var(--surface), 0 0 6px var(--surface);
+}
+
+.leaflet-tooltip.transit-label::before {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0ms !important;
+        animation-duration: 0ms !important;
+    }
 }

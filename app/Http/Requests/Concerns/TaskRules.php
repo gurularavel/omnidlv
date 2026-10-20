@@ -125,5 +125,15 @@ trait TaskRules
         if (is_string($this->input('hub_id')) && ctype_digit($this->input('hub_id'))) {
             $this->merge(['hub_id' => (int) $this->input('hub_id')]);
         }
+
+        // The panel posts tags as one comma-separated field.
+        if (is_string($this->input('tags'))) {
+            $this->merge(['tags' => array_values(array_filter(array_map('trim', explode(',', $this->input('tags')))))]);
+        }
+
+        // Empty item rows from the panel's repeater are not items.
+        if (is_array($this->input('items'))) {
+            $this->merge(['items' => array_values(array_filter($this->input('items'), fn ($i) => filled($i['name'] ?? null) || filled($i['integration_id'] ?? null)))]);
+        }
     }
 }

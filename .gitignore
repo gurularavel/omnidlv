@@ -25,3 +25,10 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Impeccable working files (design source of truth stays in PRODUCT.md, DESIGN.md, .impeccable/surfaces)
+/.impeccable/review
+/.impeccable/ref
+/.impeccable/mocks
+/.impeccable/decision-*.json
+/.impeccable/brief-*.md

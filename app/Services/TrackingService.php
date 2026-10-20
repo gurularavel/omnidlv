@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Enums\StatusCategory;
+use App\Models\CourierDetail;
 use App\Models\Task;
 use App\Support\Phone;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Public view of a task for the recipient. Nothing here may leak more than the recipient
@@ -48,7 +50,7 @@ class TrackingService
             'status_at' => $task->status_at,
             'quantity' => $task->quantity,
             'is_final' => $category->isFinal(),
-            'can_rate' => $category === StatusCategory::Completed && $task->rating === 0,
+            'can_rate' => $category === StatusCategory::Completed && $task->rating === 0 && $company->hasFeature('customer_feedback'),
             'rating' => $task->rating ?: null,
             'created_at' => $task->created_at,
             'updated_at' => $task->updated_at,
@@ -83,6 +85,35 @@ class TrackingService
                 'created_at' => $log->created_at,
             ])->values(),
         ];
+    }
+
+    /**
+     * One rating per completed task. The courier's average is recomputed from their rated
+     * tasks in this company, so it can never drift from the source rows.
+     */
+    public function rate(Task $task, int $rating, ?string $comment): void
+    {
+        if ($task->status_category_slug !== StatusCategory::Completed || $task->rating > 0 || ! $task->company->hasFeature('customer_feedback')) {
+            abort(422, __('tracking.cannot_rate'));
+        }
+
+        DB::transaction(function () use ($task, $rating, $comment) {
+            Task::withoutGlobalScopes()->whereKey($task->id)->update(['rating' => $rating, 'comment' => $comment]);
+
+            if ($task->courier_id) {
+                $stats = Task::withoutGlobalScopes()
+                    ->where('company_id', $task->company_id)
+                    ->where('courier_id', $task->courier_id)
+                    ->where('rating', '>', 0)
+                    ->selectRaw('count(*) as n, avg(rating) as avg')
+                    ->first();
+
+                CourierDetail::withoutGlobalScopes()
+                    ->where('company_id', $task->company_id)
+                    ->where('user_id', $task->courier_id)
+                    ->update(['rating' => round((float) $stats->avg, 1), 'scored_tasks_count' => $stats->n]);
+            }
+        });
     }
 
     private function maskName(?string $name): ?string

@@ -35,6 +35,13 @@ return [
         ],
     ],
 
+    // OSM's public tiles suit development and light use only; production traffic should point
+    // MAP_TILES at a self-hosted or paid tile server (see docs/DEVOPS-TAPSIRIQLAR.md).
+    'map' => [
+        'tiles' => env('MAP_TILES', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
+        'attribution' => env('MAP_ATTRIBUTION', '&copy; OpenStreetMap contributors'),
+    ],
+
     'geocoder' => [
         'driver' => env('GEOCODER', 'nominatim'),
         'nominatim_url' => env('NOMINATIM_URL', 'https://nominatim.openstreetmap.org'),

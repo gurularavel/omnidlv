@@ -55,8 +55,9 @@ enum StatusCategory: string
             self::Created => [self::Pool, self::Assigned, self::Cancelled, self::Failed],
             self::Pool => [self::Created, self::Assigned, self::Cancelled, self::Failed],
             self::Assigned => [self::Created, self::Pool, self::Assigned, self::InProgress, self::OnDelivery, self::Cancelled, self::Failed],
-            self::InProgress => [self::Assigned, self::InProgress, self::OnDelivery, self::Completed, self::Cancelled, self::Failed],
-            self::OnDelivery => [self::InProgress, self::OnDelivery, self::Completed, self::Cancelled, self::Failed],
+            // A moving task can still be handed back or to another courier (breakdown, reroute).
+            self::InProgress => [self::Created, self::Pool, self::Assigned, self::InProgress, self::OnDelivery, self::Completed, self::Cancelled, self::Failed],
+            self::OnDelivery => [self::Created, self::Pool, self::Assigned, self::InProgress, self::OnDelivery, self::Completed, self::Cancelled, self::Failed],
             self::Completed, self::Cancelled, self::Failed => [],
         };
     }

@@ -23,6 +23,18 @@ class Company extends Model implements AuthenticatableContract
 
     protected $guarded = ['id'];
 
+    // Mirrors the column defaults so a freshly created model carries them before a reload.
+    protected $attributes = [
+        'timezone' => 'Asia/Baku',
+        'locale' => 'az',
+        'country' => 'AZ',
+        'currency' => 'AZN',
+        'primary_color' => '#e21d2d',
+        'secondary_color' => '#0b1230',
+        'plan_slug' => 'start',
+        'settings' => '{}',
+    ];
+
     protected function casts(): array
     {
         return [
