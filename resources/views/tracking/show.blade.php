@@ -43,7 +43,7 @@
     </header>
 
     <section class="mb-4">
-        <h1 class="t-display uppercase" @if ($problem) style="color:#c8102e" @endif>{{ $t['status']['name'] }}</h1>
+        <h1 class="t-display uppercase" @if ($problem) style="color: var(--danger-text)" @endif>{{ $t['status']['name'] }}</h1>
         @if ($t['type_slug'] === 'pickup')<p class="mt-2 text-[var(--text-2)]">{{ __('Your pickup') }}</p>@endif
         @if ($t['status']['description'])<p class="mt-2 text-[var(--text-2)]">{{ $t['status']['description'] }}</p>@endif
         @unless ($t['is_final'])

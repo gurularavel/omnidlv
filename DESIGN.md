@@ -27,6 +27,7 @@ colors:
   ink-900: "#0b1230"
   ink-600: "#45506e"
   porcelain-danger: "#c8102e"
+  porcelain-risk: "#8a5d00"
 typography:
   display:
     fontFamily: "Fira Sans Condensed, Fira Sans, ui-sans-serif, sans-serif"
@@ -34,6 +35,13 @@ typography:
     fontWeight: 700
     lineHeight: 1
     letterSpacing: "0.02em"
+  hero:
+    fontFamily: "Fira Sans Condensed, Fira Sans, ui-sans-serif, sans-serif"
+    fontSize: "56px"
+    fontWeight: 700
+    lineHeight: 0.95
+    letterSpacing: "0.01em"
+    fontFeature: "tnum"
   title:
     fontFamily: "Fira Sans Condensed, Fira Sans, ui-sans-serif, sans-serif"
     fontSize: "20px"
@@ -50,6 +58,12 @@ typography:
   body:
     fontFamily: "Fira Sans, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.5
+    fontFeature: "tnum"
+  body-courier:
+    fontFamily: "Fira Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.5
     fontFeature: "tnum"
@@ -154,7 +168,8 @@ The palette is a midnight enamel ground and porcelain line work, plus a small se
 - **Line Cobalt** (`ink-cobalt`), **Line Green** (`ink-green`), **Line Teal** (`ink-teal`), **Line Violet** (`ink-violet`): the four courier/team identity inks, assigned in rotation. A courier keeps one ink everywhere: the map line, the day-plan strip, the marker plate, and the bar beside their exceptions. Cobalt also drives focus in the porcelain variant, input focus rings, checked checkboxes and text selection. **Cobalt Text** (`ink-cobalt-text`) and **Green Text** (`ink-green-text`) are the tints that stay legible as text on midnight.
 
 ### Tertiary
-- **Warning Amber** (`ink-amber`): at risk (20 minutes or less left), the attention icon, the reconnecting status dot, the focus outline and the text caret on midnight. Never a line colour.
+- **Warning Amber** (`ink-amber`): at risk (20 minutes or less left), the attention icon, the reconnecting status dot, the focus outline and the text caret on midnight. Never a line colour. As text on midnight it is also the value of `--risk-text`.
+- **Porcelain Risk** (`porcelain-risk`): the darkened amber that `--risk-text` takes in the porcelain variant, next to **Porcelain Danger**. Raw amber is about 1.6:1 on white; this reads in sunlight (about 5.9:1). Amber stays usable on porcelain as a border or dashed outline (the offline-queue notice, the locked-task notice), never as text.
 
 ### Neutral
 - **Midnight Enamel** (`night-900`): the panel ground, the nav rail, the header (at 95% with a backdrop blur), the map ground, and the casing under every transit line.
@@ -166,12 +181,16 @@ The palette is a midnight enamel ground and porcelain line work, plus a small se
 
 Hairlines are derived, not stored. On midnight, `--hairline` is porcelain at 18% (row dividers) and `--hairline-strong` is porcelain at 42% (control borders, table header rule). `--outline` is porcelain-dim at 36% (plate and rail borders). In the porcelain variant these become `line`, #8f98b0 and #c9cfdb.
 
+Alarm text is also derived. `--danger-text` is `ink-scarlet-text` on midnight and `porcelain-danger` on porcelain. `--risk-text` is `ink-amber` on midnight and `porcelain-risk` on porcelain.
+
 ### Named Rules
 **The Three Jobs Rule.** Hue does three jobs only: courier identity (the four inks), scarlet for action and late/failed, amber for at risk. Any other coloured element is noise.
 
 **The No Alarm Lines Rule.** Scarlet and amber are never assigned as a courier or team ink. A late line keeps its own ink and shows lateness by form: a scarlet ring around the late station.
 
 **The Neutral Status Rule.** Status dashes are drawn in porcelain-dim and carry meaning by form: dashed (created, pool), solid (assigned through completed), struck (cancelled, in porcelain-mute). The one exception is failed, which is double and scarlet. A status dash never shares a colour with a courier's line.
+
+**The Sunlit Amber Rule.** On porcelain, at-risk minutes and any other at-risk text use `--risk-text` (`porcelain-risk`), never raw amber. Write against the variable, not the ink, so the same markup reads on both materials.
 
 ## Typography
 
@@ -181,19 +200,21 @@ Hairlines are derived, not stored. On midnight, `--hairline` is porcelain at 18%
 **Character:** A humanist transit sans. The condensed cut is uppercase and tracked, like station signage, and gives labels, codes and numerals their voice. The regular cut keeps body text calm and readable across az/en/ru/tr. Both are self-hosted through @fontsource with latin-ext and cyrillic coverage, so ə and Cyrillic render in the real face. Numerals are tabular everywhere (`font-variant-numeric: tabular-nums` on body).
 
 ### Hierarchy
+- **Hero** (700, 56px, line-height 0.95, 0.01em; courier app only): the next stop's minutes-left, read at arm's length in sunlight. Sized so a three-digit negative value and its label fit a 390px frame.
 - **Display** (700, 32px, line-height 1): the headline of a view. The task's tracking code on a task page, the status word on the tracking page. Uppercase there.
 - **Title** (700, 20px, 1.2, 0.04em, uppercase): page titles in the header, empty-state titles, the wordmark.
 - **Value** (600, 20px, 1.15, 0.02em): values and list numerals. Minutes-left, the clock, key facts in a task header.
-- **Body** (400, 14px, 1.5): running text, table cells, form values.
+- **Body** (400, 14px, 1.5): running text, table cells, form values in the panel.
+- **Courier body** (400, 16px, 1.5): running text on the phone surfaces used outdoors: the courier app (address lines, recipient, notes, sign-in copy) and the tracking lookup. The large primary buttons there (56 to 64px tall) set their text at 16px too.
 - **Label** (600, 12px, 0.08em, uppercase, porcelain-dim): field labels, table headers, plate-head titles, section headings inside a view.
 - **Code** (600, 0.06em, condensed): tracking codes and SKUs, set as the identity line of a record at whatever size the context uses.
 
 ### Named Rules
-**The Three Steps Rule.** The type scale is label 12, body 14, value/title 20, display 32. A new size needs a reason that one of these cannot meet.
+**The Three Steps Rule.** The type scale is label 12, body 14, value/title 20, display 32. A new size needs a reason that one of these cannot meet. The porcelain phone surfaces carry two such reasons: body 16 (read outdoors on a phone) and hero 56 (the courier's next-stop minutes, courier app only). Neither belongs on the panel.
 
 As built, controls (buttons, nav links, status labels) run at 13px and a few rail sub-labels at 10 to 11px. These predate the rule and are drift, not scale steps. New surfaces use the four steps.
 
-**The Tabular Minutes Rule.** Every number is tabular. Minutes-left is a Value numeral: scarlet text when negative (late), amber at 20 or less (at risk), plain porcelain otherwise. Late minutes carry a minus sign (−15).
+**The Tabular Minutes Rule.** Every number is tabular. Minutes-left is a Value numeral (Display on a task page, Hero for the courier's next stop): `--danger-text` when negative (late), `--risk-text` at 20 or less (at risk), plain text colour otherwise. Late minutes carry a minus sign (−15).
 
 ## Layout
 
@@ -201,7 +222,7 @@ The panel is a fixed nav rail (236px, outlined right edge) plus a 64px sticky he
 
 Below 1024px the rail becomes an off-canvas drawer over a `night-950` scrim. Header search appears from 768px. Below 640px the header's primary action collapses to its 38px icon so the title keeps its room. Horizontal tab strips and status boards scroll by swipe with the scrollbar hidden.
 
-The porcelain variant is a single centred column (max 560px) for phone use.
+The porcelain variant is a single centred column for phone use. The courier app's column is max 520px, and its sticky action bar and bottom sheets are capped at the same 520px. The tracking page is max 560px. The sign-in forms are narrower (440px for courier sign-in and code entry, 480px for tracking lookup).
 
 Rhythm is tight and regular. Gaps run 8 / 10 / 12px inside rows. Table cells are 12px by 14px, plate heads 14px by 18px, porcelain plate rows 16px.
 
@@ -217,6 +238,8 @@ The system is flat and outlined. Depth comes from tone (night-900 ground, night-
 
 ### Named Rules
 **The Outline Not Shadow Rule.** Panels and rails are separated by `--outline` (porcelain-dim at 36%, 1.5px), never by a drop shadow. A shadow means the thing floats.
+
+**The Isolated Map Rule.** Leaflet panes stack up to z-index 1000. Every Leaflet container is isolated (`isolation: isolate`) so sticky headers, drawers, action bars and sheets always sit above the map.
 
 ## Shapes
 
@@ -261,6 +284,8 @@ Header cells are Label style over a `--hairline-strong` rule. Body cells are 12p
 - **Courier marker:** a 30px ink plate with 8px corners, a 2px porcelain border and white condensed initials. Offline couriers show at 55%.
 - **Status:** a short line glyph (18px by 3px) before the label at 13px: solid, dashed (4px on, 3px off), double (two 2px rules), or struck text for cancelled.
 - **Map tinting:** OSM tiles are inverted and greyscaled, then an enamel pane (#24388a, blend `color`) re-inks them into the night family. Map labels are condensed uppercase with a halo in the ground colour. On porcelain, tiles are quieted (grayscale 0.9, 85% opacity) instead.
+- **Map controls:** the zoom control sits bottom-right on maps that are operated (panel maps, the tracking page).
+- **Glance strip:** a map shown only to orient (the courier's next stop, 170px tall inside a plate frame) has no controls and no gestures: no zoom control, dragging, scroll, pinch or double-tap zoom. It is hidden from assistive tech, because the address above it carries the information.
 
 ## Do's and Don'ts
 
@@ -272,12 +297,15 @@ Header cells are Label style over a `--hairline-strong` rule. Body cells are 12p
 - **Do** case every route line in the ground colour and dim unselected lines.
 - **Do** use the porcelain variant (`.theme-porcelain`) for surfaces used outdoors on a phone: the courier app and the tracking page.
 - **Do** set labels, buttons and nav in Fira Sans Condensed, uppercase and tracked, and keep every number tabular.
+- **Do** colour at-risk text with `--risk-text` and late text with `--danger-text`, so it holds on both materials.
+- **Do** isolate every Leaflet container, and strip controls and gestures from maps that are only glance strips.
 
 ### Don't:
 - **Don't** put kicker or eyebrow labels above headings. A Label names a field, a column or a plate. It never introduces a title.
 - **Don't** assign scarlet or amber as a courier or team ink.
 - **Don't** colour a status dash with an identity ink or a decorative hue.
 - **Don't** separate panels with drop shadows. Shadows are only for menus, popups and map markers.
-- **Don't** add type sizes outside label 12 / body 14 / value-title 20 / display 32.
+- **Don't** add type sizes outside label 12 / body 14 / value-title 20 / display 32, plus body 16 and hero 56 on the porcelain phone surfaces.
+- **Don't** set text in raw amber on porcelain.
 - **Don't** ship a second basemap or a stock blue-pin map. Re-ink the tiles into the enamel.
 - **Don't** fall back to a system face for display. Fira Sans Condensed is self-hosted for latin-ext and cyrillic.

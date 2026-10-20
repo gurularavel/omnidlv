@@ -6,7 +6,7 @@
 <span {{ $attributes->class([
     't-value tabular-nums',
     'text-[var(--danger-text)]' => $urgency === 'late',
-    'text-ink-amber' => $urgency === 'risk',
+    'text-[var(--risk-text)]' => $urgency === 'risk',
     'text-[var(--text-3)]' => $final,
 ]) }} title="{{ \App\Support\Ui::localTime($endsAt, 'd M H:i') }}">
     @if ($final)

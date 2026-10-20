@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-20T18:44:21+00:00",
+  "generatedAt": "2026-10-21T00:00:00+00:00",
   "title": "Design System: OmniDLV",
   "extensions": {
     "colorMeta": {
@@ -139,6 +139,20 @@
         "role": "tertiary",
         "displayName": "Warning Amber",
         "canonical": "oklch(84.6% 0.172 85.3)",
+        "tonalRamp": [
+          "oklch(15% 0.073 85.3)",
+          "oklch(25% 0.102 85.3)",
+          "oklch(35% 0.130 85.3)",
+          "oklch(48% 0.168 85.3)",
+          "oklch(60% 0.172 85.3)",
+          "oklch(72% 0.168 85.3)",
+          "oklch(84% 0.133 85.3)",
+          "oklch(95% 0.102 85.3)"
+        ]
+      },
+      "porcelain-risk": {
+        "role": "tertiary",
+        "displayName": "Porcelain Risk",
         "tonalRamp": [
           "oklch(15% 0.073 85.3)",
           "oklch(25% 0.102 85.3)",
@@ -365,6 +379,10 @@
       }
     },
     "typographyMeta": {
+      "hero": {
+        "displayName": "Hero",
+        "purpose": "Courier app only: the next stop's minutes-left, read at arm's length in sunlight; fits a three-digit negative value and its label in a 390px frame."
+      },
       "display": {
         "displayName": "Display",
         "purpose": "Headline of a view: tracking code on the task page, status word on the tracking page."
@@ -380,6 +398,10 @@
       "body": {
         "displayName": "Body",
         "purpose": "Running text, table cells, form values; tabular numerals."
+      },
+      "body-courier": {
+        "displayName": "Courier body",
+        "purpose": "Running text on the porcelain phone surfaces (courier app, tracking lookup), read outdoors."
       },
       "label": {
         "displayName": "Label",
@@ -544,18 +566,28 @@
         "section": "colors"
       },
       {
+        "name": "The Sunlit Amber Rule",
+        "body": "On porcelain, at-risk minutes and any other at-risk text use `--risk-text` (`porcelain-risk`), never raw amber. Write against the variable, not the ink, so the same markup reads on both materials.",
+        "section": "colors"
+      },
+      {
         "name": "The Three Steps Rule",
-        "body": "The type scale is label 12, body 14, value/title 20, display 32. A new size needs a reason that one of these cannot meet.",
+        "body": "The type scale is label 12, body 14, value/title 20, display 32. A new size needs a reason that one of these cannot meet. The porcelain phone surfaces carry two such reasons: body 16 (read outdoors on a phone) and hero 56 (the courier's next-stop minutes, courier app only). Neither belongs on the panel.",
         "section": "typography"
       },
       {
         "name": "The Tabular Minutes Rule",
-        "body": "Every number is tabular. Minutes-left is a Value numeral: scarlet text when negative (late), amber at 20 or less (at risk), plain porcelain otherwise. Late minutes carry a minus sign (−15).",
+        "body": "Every number is tabular. Minutes-left is a Value numeral (Display on a task page, Hero for the courier's next stop): `--danger-text` when negative (late), `--risk-text` at 20 or less (at risk), plain text colour otherwise. Late minutes carry a minus sign (−15).",
         "section": "typography"
       },
       {
         "name": "The Outline Not Shadow Rule",
         "body": "Panels and rails are separated by `--outline` (porcelain-dim at 36%, 1.5px), never by a drop shadow. A shadow means the thing floats.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Isolated Map Rule",
+        "body": "Leaflet panes stack up to z-index 1000. Every Leaflet container is isolated (`isolation: isolate`) so sticky headers, drawers, action bars and sheets always sit above the map.",
         "section": "elevation"
       }
     ],
@@ -566,14 +598,17 @@
       "**Do** outline plates and rails with `--outline` (porcelain-dim at 36%, 1.5px) and separate rows with `--hairline`.",
       "**Do** case every route line in the ground colour and dim unselected lines.",
       "**Do** use the porcelain variant (`.theme-porcelain`) for surfaces used outdoors on a phone: the courier app and the tracking page.",
-      "**Do** set labels, buttons and nav in Fira Sans Condensed, uppercase and tracked, and keep every number tabular."
+      "**Do** set labels, buttons and nav in Fira Sans Condensed, uppercase and tracked, and keep every number tabular.",
+      "**Do** colour at-risk text with `--risk-text` and late text with `--danger-text`, so it holds on both materials.",
+      "**Do** isolate every Leaflet container, and strip controls and gestures from maps that are only glance strips."
     ],
     "donts": [
       "**Don't** put kicker or eyebrow labels above headings. A Label names a field, a column or a plate. It never introduces a title.",
       "**Don't** assign scarlet or amber as a courier or team ink.",
       "**Don't** colour a status dash with an identity ink or a decorative hue.",
       "**Don't** separate panels with drop shadows. Shadows are only for menus, popups and map markers.",
-      "**Don't** add type sizes outside label 12 / body 14 / value-title 20 / display 32.",
+      "**Don't** add type sizes outside label 12 / body 14 / value-title 20 / display 32, plus body 16 and hero 56 on the porcelain phone surfaces.",
+      "**Don't** set text in raw amber on porcelain.",
       "**Don't** ship a second basemap or a stock blue-pin map. Re-ink the tiles into the enamel.",
       "**Don't** fall back to a system face for display. Fira Sans Condensed is self-hosted for latin-ext and cyrillic."
     ]

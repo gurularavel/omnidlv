@@ -119,7 +119,7 @@
                                   :style="item.courier_ink ? `background:${item.courier_ink}` : 'background:repeating-linear-gradient(#8e99b8 0 5px, transparent 5px 9px)'"></span>
                             <span class="flex flex-col items-start">
                                 <span class="t-value"
-                                      :class="{ 'text-[var(--danger-text)]': item.urgency === 'late', 'text-ink-amber': item.urgency === 'risk' }"
+                                      :class="{ 'text-[var(--danger-text)]': item.urgency === 'late', 'text-[var(--risk-text)]': item.urgency === 'risk' }"
                                       x-text="item.minutes_label"></span>
                                 <span class="t-label text-[10px] text-[var(--text-3)]">{{ __('min') }}</span>
                             </span>
