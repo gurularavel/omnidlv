@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-20T18:44:21+00:00",
+  "title": "Design System: OmniDLV",
+  "extensions": {
+    "colorMeta": {
+      "ink-scarlet": {
+        "role": "primary",
+        "displayName": "Signal Scarlet",
+        "canonical": "oklch(58.4% 0.224 25.0)",
+        "tonalRamp": [
+          "oklch(15% 0.086 25.0)",
+          "oklch(25% 0.123 25.0)",
+          "oklch(35% 0.161 25.0)",
+          "oklch(48% 0.209 25.0)",
+          "oklch(60% 0.224 25.0)",
+          "oklch(72% 0.209 25.0)",
+          "oklch(84% 0.164 25.0)",
+          "oklch(95% 0.123 25.0)"
+        ]
+      },
+      "ink-scarlet-text": {
+        "role": "primary",
+        "displayName": "Scarlet Signal Text",
+        "tonalRamp": [
+          "oklch(15% 0.086 25.0)",
+          "oklch(25% 0.123 25.0)",
+          "oklch(35% 0.161 25.0)",
+          "oklch(48% 0.209 25.0)",
+          "oklch(60% 0.224 25.0)",
+          "oklch(72% 0.209 25.0)",
+          "oklch(84% 0.164 25.0)",
+          "oklch(95% 0.123 25.0)"
+        ]
+      },
+      "porcelain-danger": {
+        "role": "primary",
+        "displayName": "Porcelain Danger",
+        "tonalRamp": [
+          "oklch(15% 0.086 25.0)",
+          "oklch(25% 0.123 25.0)",
+          "oklch(35% 0.161 25.0)",
+          "oklch(48% 0.209 25.0)",
+          "oklch(60% 0.224 25.0)",
+          "oklch(72% 0.209 25.0)",
+          "oklch(84% 0.164 25.0)",
+          "oklch(95% 0.123 25.0)"
+        ]
+      },
+      "ink-cobalt": {
+        "role": "secondary",
+        "displayName": "Line Cobalt",
+        "canonical": "oklch(58.1% 0.229 263.9)",
+        "tonalRamp": [
+          "oklch(15% 0.087 263.9)",
+          "oklch(25% 0.125 263.9)",
+          "oklch(35% 0.164 263.9)",
+          "oklch(48% 0.213 263.9)",
+          "oklch(60% 0.229 263.9)",
+          "oklch(72% 0.213 263.9)",
+          "oklch(84% 0.167 263.9)",
+          "oklch(95% 0.125 263.9)"
+        ]
+      },
+      "ink-cobalt-text": {
+        "role": "secondary",
+        "displayName": "Cobalt Text",
+        "tonalRamp": [
+          "oklch(15% 0.087 263.9)",
+          "oklch(25% 0.125 263.9)",
+          "oklch(35% 0.164 263.9)",
+          "oklch(48% 0.213 263.9)",
+          "oklch(60% 0.229 263.9)",
+          "oklch(72% 0.213 263.9)",
+          "oklch(84% 0.167 263.9)",
+          "oklch(95% 0.125 263.9)"
+        ]
+      },
+      "ink-green": {
+        "role": "secondary",
+        "displayName": "Line Green",
+        "canonical": "oklch(66.7% 0.183 147.8)",
+        "tonalRamp": [
+          "oklch(15% 0.076 147.8)",
+          "oklch(25% 0.106 147.8)",
+          "oklch(35% 0.137 147.8)",
+          "oklch(48% 0.176 147.8)",
+          "oklch(60% 0.183 147.8)",
+          "oklch(72% 0.176 147.8)",
+          "oklch(84% 0.140 147.8)",
+          "oklch(95% 0.106 147.8)"
+        ]
+      },
+      "ink-green-text": {
+        "role": "secondary",
+        "displayName": "Green Text",
+        "tonalRamp": [
+          "oklch(15% 0.076 147.8)",
+          "oklch(25% 0.106 147.8)",
+          "oklch(35% 0.137 147.8)",
+          "oklch(48% 0.176 147.8)",
+          "oklch(60% 0.183 147.8)",
+          "oklch(72% 0.176 147.8)",
+          "oklch(84% 0.140 147.8)",
+          "oklch(95% 0.106 147.8)"
+        ]
+      },
+      "ink-teal": {
+        "role": "secondary",
+        "displayName": "Line Teal",
+        "canonical": "oklch(69.1% 0.119 184.9)",
+        "tonalRamp": [
+          "oklch(15% 0.060 184.9)",
+          "oklch(25% 0.080 184.9)",
+          "oklch(35% 0.099 184.9)",
+          "oklch(48% 0.119 184.9)",
+          "oklch(60% 0.119 184.9)",
+          "oklch(72% 0.119 184.9)",
+          "oklch(84% 0.101 184.9)",
+          "oklch(95% 0.080 184.9)"
+        ]
+      },
+      "ink-violet": {
+        "role": "secondary",
+        "displayName": "Line Violet",
+        "canonical": "oklch(64.9% 0.211 294.8)",
+        "tonalRamp": [
+          "oklch(15% 0.083 294.8)",
+          "oklch(25% 0.118 294.8)",
+          "oklch(35% 0.153 294.8)",
+          "oklch(48% 0.199 294.8)",
+          "oklch(60% 0.211 294.8)",
+          "oklch(72% 0.199 294.8)",
+          "oklch(84% 0.157 294.8)",
+          "oklch(95% 0.118 294.8)"
+        ]
+      },
+      "ink-amber": {
+        "role": "tertiary",
+        "displayName": "Warning Amber",
+        "canonical": "oklch(84.6% 0.172 85.3)",
+        "tonalRamp": [
+          "oklch(15% 0.073 85.3)",
+          "oklch(25% 0.102 85.3)",
+          "oklch(35% 0.130 85.3)",
+          "oklch(48% 0.168 85.3)",
+          "oklch(60% 0.172 85.3)",
+          "oklch(72% 0.168 85.3)",
+          "oklch(84% 0.133 85.3)",
+          "oklch(95% 0.102 85.3)"
+        ]
+      },
+      "porcelain": {
+        "role": "neutral",
+        "displayName": "Porcelain",
+        "canonical": "oklch(96.1% 0.008 91.5)",
+        "tonalRamp": [
+          "oklch(15% 0.008 91.5)",
+          "oklch(25% 0.008 91.5)",
+          "oklch(35% 0.008 91.5)",
+          "oklch(48% 0.008 91.5)",
+          "oklch(60% 0.008 91.5)",
+          "oklch(72% 0.008 91.5)",
+          "oklch(84% 0.008 91.5)",
+          "oklch(95% 0.008 91.5)"
+        ]
+      },
+      "porcelain-dim": {
+        "role": "neutral",
+        "displayName": "Porcelain Dim",
+        "canonical": "oklch(83.6% 0.025 270.3)",
+        "tonalRamp": [
+          "oklch(15% 0.025 270.3)",
+          "oklch(25% 0.025 270.3)",
+          "oklch(35% 0.025 270.3)",
+          "oklch(48% 0.025 270.3)",
+          "oklch(60% 0.025 270.3)",
+          "oklch(72% 0.025 270.3)",
+          "oklch(84% 0.025 270.3)",
+          "oklch(95% 0.025 270.3)"
+        ]
+      },
+      "porcelain-mute": {
+        "role": "neutral",
+        "displayName": "Porcelain Mute",
+        "canonical": "oklch(68.5% 0.047 269.8)",
+        "tonalRamp": [
+          "oklch(15% 0.042 269.8)",
+          "oklch(25% 0.047 269.8)",
+          "oklch(35% 0.047 269.8)",
+          "oklch(48% 0.047 269.8)",
+          "oklch(60% 0.047 269.8)",
+          "oklch(72% 0.047 269.8)",
+          "oklch(84% 0.047 269.8)",
+          "oklch(95% 0.047 269.8)"
+        ]
+      },
+      "night-950": {
+        "role": "neutral",
+        "displayName": "Deep Enamel",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-900": {
+        "role": "neutral",
+        "displayName": "Midnight Enamel",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-850": {
+        "role": "neutral",
+        "displayName": "Raised Enamel",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-800": {
+        "role": "neutral",
+        "displayName": "Hover Enamel",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-700": {
+        "role": "neutral",
+        "displayName": "Enamel 700",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-600": {
+        "role": "neutral",
+        "displayName": "Enamel 600",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "night-500": {
+        "role": "neutral",
+        "displayName": "Enamel 500",
+        "tonalRamp": [
+          "#070c20",
+          "#0b1230",
+          "#0f1939",
+          "#152147",
+          "#1f2d5a",
+          "#33447a",
+          "#4d5f97",
+          "#8e99b8"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper (porcelain variant)",
+        "tonalRamp": [
+          "#0b1230",
+          "#45506e",
+          "#5d6782",
+          "#8f98b0",
+          "#c9cfdb",
+          "#d8dce6",
+          "#f3f4f7",
+          "#ffffff"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Paper 2 (porcelain variant)",
+        "tonalRamp": [
+          "#0b1230",
+          "#45506e",
+          "#5d6782",
+          "#8f98b0",
+          "#c9cfdb",
+          "#d8dce6",
+          "#f3f4f7",
+          "#ffffff"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line (porcelain variant)",
+        "tonalRamp": [
+          "#0b1230",
+          "#45506e",
+          "#5d6782",
+          "#8f98b0",
+          "#c9cfdb",
+          "#d8dce6",
+          "#f3f4f7",
+          "#ffffff"
+        ]
+      },
+      "ink-900": {
+        "role": "neutral",
+        "displayName": "Ink 900 (porcelain variant)",
+        "tonalRamp": [
+          "#0b1230",
+          "#45506e",
+          "#5d6782",
+          "#8f98b0",
+          "#c9cfdb",
+          "#d8dce6",
+          "#f3f4f7",
+          "#ffffff"
+        ]
+      },
+      "ink-600": {
+        "role": "neutral",
+        "displayName": "Ink 600 (porcelain variant)",
+        "tonalRamp": [
+          "#0b1230",
+          "#45506e",
+          "#5d6782",
+          "#8f98b0",
+          "#c9cfdb",
+          "#d8dce6",
+          "#f3f4f7",
+          "#ffffff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Headline of a view: tracking code on the task page, status word on the tracking page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Page titles in the header, empty-state titles, wordmark; uppercase."
+      },
+      "value": {
+        "displayName": "Value",
+        "purpose": "Values and list numerals: minutes-left, clock, key facts."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, table cells, form values; tabular numerals."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, table headers, plate-head titles; uppercase, porcelain-dim. Never a kicker above a heading."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating-menu",
+        "value": "0 12px 32px rgb(0 0 0 / 0.4)",
+        "purpose": "Dropdown plates."
+      },
+      {
+        "name": "map-popup",
+        "value": "0 8px 24px rgb(0 0 0 / 0.35)",
+        "purpose": "Leaflet popups."
+      },
+      {
+        "name": "courier-marker",
+        "value": "0 4px 12px rgb(0 0 0 / 0.45)",
+        "purpose": "Courier ink plate on the map."
+      },
+      {
+        "name": "knockout-ring",
+        "value": "0 0 0 3px var(--surface)",
+        "purpose": "Not elevation: cuts interchange and late-station rings out of the line beneath."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "state",
+        "value": "160ms",
+        "purpose": "Background and border changes on buttons, inputs, nav."
+      },
+      {
+        "name": "press",
+        "value": "120ms",
+        "purpose": "1px press-down on buttons; table row hover."
+      },
+      {
+        "name": "drawer",
+        "value": "300ms",
+        "purpose": "Mobile nav rail slide."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0ms",
+        "purpose": "prefers-reduced-motion zeroes all transitions and animations."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one thing to press on a view, in Signal Scarlet.",
+      "html": "<div class=\"ds-wrap\"><button class=\"ds-btn ds-btn-primary\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>New task</button></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:16px} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:6px;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;background:transparent;border:1.5px solid var(--hairline-strong);color:var(--text);cursor:pointer;transition:background-color 160ms var(--ease-out-expo),border-color 160ms var(--ease-out-expo),transform 120ms var(--ease-out-expo)} .ds-btn:hover{background:var(--surface-hover);border-color:var(--text)} .ds-btn:active{transform:translateY(1px)} .ds-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px} .ds-btn-primary{background:var(--action);border-color:var(--action);color:#fff} .ds-btn-primary:hover{background:color-mix(in oklab,var(--action) 86%,black);border-color:color-mix(in oklab,var(--action) 86%,black)}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined signage button for every other action; ghost drops the border.",
+      "html": "<div class=\"ds-wrap\"><button class=\"ds-btn\">Edit</button><button class=\"ds-btn ds-btn-ghost\">AZ</button></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:16px;display:flex;gap:8px} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:6px;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;background:transparent;border:1.5px solid var(--hairline-strong);color:var(--text);cursor:pointer;transition:background-color 160ms var(--ease-out-expo),border-color 160ms var(--ease-out-expo),transform 120ms var(--ease-out-expo)} .ds-btn:hover{background:var(--surface-hover);border-color:var(--text)} .ds-btn:active{transform:translateY(1px)} .ds-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px} .ds-btn-ghost{border-color:transparent}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Ground-filled field with a cobalt focus ring and amber caret.",
+      "html": "<div class=\"ds-wrap\"><label class=\"ds-label\">Phone</label><input class=\"ds-input\" placeholder=\"Tracking code, phone, address\"></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface-raised);padding:16px;font-family:var(--font-sans);font-size:14px} .ds-label{display:block;margin-bottom:6px;font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)} .ds-input{width:100%;height:40px;padding:0 12px;border-radius:6px;background:var(--surface);border:1.5px solid var(--hairline-strong);color:var(--text);font:inherit;caret-color:#ffc20e;transition:border-color 160ms var(--ease-out-expo),box-shadow 160ms var(--ease-out-expo)} .ds-input::placeholder{color:var(--text-3)} .ds-input:hover{border-color:var(--text-2)} .ds-input:focus{outline:none;border-color:#86a8ff;box-shadow:0 0 0 3px color-mix(in oklab,#2f6bff 30%,transparent)}"
+    },
+    {
+      "name": "Rail Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Condensed uppercase rail links; the current page carries a scarlet line marker.",
+      "html": "<nav class=\"ds-rail\"><a class=\"ds-nav\" aria-current=\"page\" href=\"#\">Live monitor</a><a class=\"ds-nav\" href=\"#\">Tasks</a><a class=\"ds-nav\" href=\"#\">Couriers</a></nav>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-rail{display:flex;flex-direction:column;gap:4px;width:236px;padding:12px;background:var(--surface);border-right:1.5px solid var(--outline)} .ds-nav{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:6px;position:relative;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);text-decoration:none;transition:color 160ms,background-color 160ms} .ds-nav:hover{color:var(--text);background:var(--surface-hover)} .ds-nav:focus-visible{outline:2px solid var(--focus);outline-offset:2px} .ds-nav[aria-current=page]{color:var(--text)} .ds-nav[aria-current=page]::after{content:'';position:absolute;left:12px;right:12px;bottom:3px;height:3px;border-radius:2px;background:var(--action)}"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Outlined reason tag; scarlet only when the reason is late.",
+      "html": "<div class=\"ds-wrap\"><span class=\"ds-tag ds-tag-late\">Late</span><span class=\"ds-tag\">At risk</span><span class=\"ds-tag\">No courier</span></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:16px;display:flex;gap:8px;font-family:var(--font-sans)} .ds-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;border:1px solid var(--hairline-strong);font-size:12px;color:var(--text-2)} .ds-tag-late{border-color:color-mix(in oklab,#e21d2d 70%,transparent);color:var(--danger-text)}"
+    },
+    {
+      "name": "Plate",
+      "kind": "card",
+      "refersTo": "plate",
+      "description": "Outlined enamel panel with a label head; flat, no shadow.",
+      "html": "<div class=\"ds-wrap\"><section class=\"ds-plate\"><div class=\"ds-plate-head\">Recipient</div><div class=\"ds-plate-body\"><div class=\"ds-label\">Name</div><div class=\"ds-value\">Səbinə Kərimova</div></div></section></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:16px;font-family:var(--font-sans);font-size:14px;color:var(--text)} .ds-plate{background:var(--surface-raised);border:1.5px solid var(--outline);border-radius:10px;max-width:320px} .ds-plate-head{padding:14px 18px;border-bottom:1px solid var(--hairline);font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text)} .ds-plate-body{padding:18px} .ds-label{font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)} .ds-value{font-family:var(--font-display);font-weight:600;font-size:20px;line-height:1.15;letter-spacing:.02em;margin-top:4px}"
+    },
+    {
+      "name": "Status by Form",
+      "kind": "custom",
+      "refersTo": "status",
+      "description": "Neutral line glyph whose form carries the status: dashed, solid, double (failed, scarlet), struck.",
+      "html": "<div class=\"ds-wrap\"><span class=\"ds-status\" data-form=\"dashed\">Pool</span><span class=\"ds-status\" data-form=\"solid\">On the way</span><span class=\"ds-status ds-failed\" data-form=\"double\">Failed</span><span class=\"ds-status\" data-form=\"struck\">Cancelled</span></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;font-family:var(--font-sans);color:var(--text)} .ds-status{--status-ink:#c3c9da;display:inline-flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap} .ds-status::before{content:'';flex:none;width:18px;height:3px;background:var(--status-ink)} .ds-status[data-form=dashed]::before{background:repeating-linear-gradient(90deg,var(--status-ink) 0 4px,transparent 4px 7px)} .ds-status[data-form=double]::before{height:7px;background:linear-gradient(var(--status-ink) 0 2px,transparent 2px 5px,var(--status-ink) 5px 7px)} .ds-failed{--status-ink:#e21d2d} .ds-status[data-form=struck]{--status-ink:#8e99b8;text-decoration:line-through;text-decoration-thickness:1.5px;color:var(--text-3)}"
+    },
+    {
+      "name": "Courier Line",
+      "kind": "custom",
+      "refersTo": "transit-line",
+      "description": "A courier's day as a transit line: ink bar, station rings, served stations filled, a late station ringed in scarlet; hub as interchange; minutes as a tabular value.",
+      "html": "<div class=\"ds-wrap\"><div class=\"ds-row\"><span class=\"ds-name\">Elvin Quliyev</span><span class=\"ds-line\" style=\"color:#16b3a5\"><span class=\"ds-bar\"></span><span class=\"ds-st ds-done\"></span><span class=\"ds-st ds-late\"></span><span class=\"ds-st\"></span><span class=\"ds-st\"></span></span><span class=\"ds-flag\">1 late</span></div><div class=\"ds-row\"><span class=\"ds-xc\"></span><span class=\"ds-min\">−15</span></div></div>",
+      "css": ":host{--surface:#0b1230;--surface-raised:#0f1939;--surface-hover:#152147;--text:#f4f2ec;--text-2:#c3c9da;--text-3:#8e99b8;--hairline:color-mix(in oklab,#f4f2ec 18%,transparent);--hairline-strong:color-mix(in oklab,#f4f2ec 42%,transparent);--outline:color-mix(in oklab,#c3c9da 36%,transparent);--action:#e21d2d;--focus:#ffc20e;--danger-text:#ff6b6b;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-sans:'Fira Sans',ui-sans-serif,system-ui,sans-serif;--font-display:'Fira Sans Condensed','Fira Sans',ui-sans-serif,sans-serif} .ds-wrap{background:var(--surface);padding:20px;font-family:var(--font-sans);color:var(--text);display:flex;flex-direction:column;gap:16px} .ds-row{display:flex;align-items:center;gap:16px} .ds-name{font-weight:500;width:120px} .ds-line{position:relative;flex:1;display:flex;justify-content:space-between;align-items:center;height:24px} .ds-bar{position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:999px;background:currentColor} .ds-st{position:relative;width:14px;height:14px;border-radius:999px;border:3px solid currentColor;background:var(--surface)} .ds-done{background:currentColor} .ds-late{box-shadow:0 0 0 2px #0b1230,0 0 0 4px #ff6b6b} .ds-flag{font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--danger-text)} .ds-xc{width:22px;height:22px;border-radius:999px;border:4px solid var(--text);background:var(--surface);box-shadow:0 0 0 3px var(--surface)} .ds-min{font-family:var(--font-display);font-weight:600;font-size:20px;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--danger-text)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Midnight Transit Diagram",
+    "overview": "The delivery network is drawn as a city rail map. Each courier's day is a coloured line, each task is a station tick on that line, and each hub is an interchange ring. The panel sits on midnight-blue enamel, with porcelain-white outlines and type. Lines are cased in the ground colour so they read like lines on a printed map. The map itself is re-inked into the enamel, so the courier inks carry the picture and the streets drop back to faint blue-grey hairlines.\n\nThe system is dense and operational, built for people who watch tens of couriers at once. Hue is scarce on purpose. It does exactly three jobs: courier identity, action plus late/failed, and at risk. Everything else is porcelain on enamel. Status is read from the form of a line (dashed, solid, double, struck), so the screen still works for someone who cannot tell the colours apart. Labels are uppercase and tracked, and every number is tabular, the way a station sign is set.\n\nThe same world comes in two materials. The dispatcher panel uses midnight enamel. The courier app and the public tracking page use the porcelain variant (white ground, same inks, same type) so they stay legible in sunlight. The variant changes only the surface tokens, never the grammar.",
+    "keyCharacteristics": [
+      "Midnight enamel ground (#0b1230 family) with porcelain outlines and type.",
+      "Four identity inks for couriers and teams (cobalt, green, teal, violet). Scarlet and amber are kept for alarms and are never used as line colours.",
+      "Status shown by line form: dashed = waiting, solid = moving or done, double = failed, struck = cancelled.",
+      "Fira Sans for body text and Fira Sans Condensed for labels, values and display, both self-hosted.",
+      "Flat, outlined panels. Shadows appear only under things that float.",
+      "A porcelain variant of the same world for sunlight surfaces."
+    ],
+    "rules": [
+      {
+        "name": "The Three Jobs Rule",
+        "body": "Hue does three jobs only: courier identity (the four inks), scarlet for action and late/failed, amber for at risk. Any other coloured element is noise.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Alarm Lines Rule",
+        "body": "Scarlet and amber are never assigned as a courier or team ink. A late line keeps its own ink and shows lateness by form: a scarlet ring around the late station.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Status Rule",
+        "body": "Status dashes are drawn in porcelain-dim and carry meaning by form: dashed (created, pool), solid (assigned through completed), struck (cancelled, in porcelain-mute). The one exception is failed, which is double and scarlet. A status dash never shares a colour with a courier's line.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Steps Rule",
+        "body": "The type scale is label 12, body 14, value/title 20, display 32. A new size needs a reason that one of these cannot meet.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Minutes Rule",
+        "body": "Every number is tabular. Minutes-left is a Value numeral: scarlet text when negative (late), amber at 20 or less (at risk), plain porcelain otherwise. Late minutes carry a minus sign (−15).",
+        "section": "typography"
+      },
+      {
+        "name": "The Outline Not Shadow Rule",
+        "body": "Panels and rails are separated by `--outline` (porcelain-dim at 36%, 1.5px), never by a drop shadow. A shadow means the thing floats.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** give every courier one ink from the four identity inks and use it everywhere that courier appears.",
+      "**Do** show status by line form (dashed, solid, double, struck) with the neutral porcelain-dim ink.",
+      "**Do** keep scarlet for the single primary action and for late/failed, and amber for at risk.",
+      "**Do** outline plates and rails with `--outline` (porcelain-dim at 36%, 1.5px) and separate rows with `--hairline`.",
+      "**Do** case every route line in the ground colour and dim unselected lines.",
+      "**Do** use the porcelain variant (`.theme-porcelain`) for surfaces used outdoors on a phone: the courier app and the tracking page.",
+      "**Do** set labels, buttons and nav in Fira Sans Condensed, uppercase and tracked, and keep every number tabular."
+    ],
+    "donts": [
+      "**Don't** put kicker or eyebrow labels above headings. A Label names a field, a column or a plate. It never introduces a title.",
+      "**Don't** assign scarlet or amber as a courier or team ink.",
+      "**Don't** colour a status dash with an identity ink or a decorative hue.",
+      "**Don't** separate panels with drop shadows. Shadows are only for menus, popups and map markers.",
+      "**Don't** add type sizes outside label 12 / body 14 / value-title 20 / display 32.",
+      "**Don't** ship a second basemap or a stock blue-pin map. Re-ink the tiles into the enamel.",
+      "**Don't** fall back to a system face for display. Fira Sans Condensed is self-hosted for latin-ext and cyrillic."
+    ]
+  }
+}
