@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'geocoder' => [
+        'driver' => env('GEOCODER', 'nominatim'),
+        'nominatim_url' => env('NOMINATIM_URL', 'https://nominatim.openstreetmap.org'),
+        'user_agent' => env('NOMINATIM_USER_AGENT', 'OmniDLV/1.0 (+'.env('APP_URL').')'),
+        'cache_days' => (int) env('GEOCODER_CACHE_DAYS', 30),
+    ],
+
 ];

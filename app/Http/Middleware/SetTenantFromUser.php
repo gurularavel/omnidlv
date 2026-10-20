@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Models\Employment;
+use App\Support\CurrentCompany;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpFoundation\Response;
+
+/** Panel and courier app: the tenant is the signed-in user's active company. */
+class SetTenantFromUser
+{
+    public function __construct(private readonly CurrentCompany $tenant) {}
+
+    public function handle(Request $request, Closure $next): Response
+    {
+        $user = $request->user();
+
+        $employment = Employment::withoutGlobalScopes()
+            ->with('company')
+            ->where('user_id', $user->id)
+            ->where('is_active', true)
+            ->orderByRaw('company_id = ? DESC', [$user->active_company_id ?? 0])
+            ->first();
+
+        if ($employment === null || $employment->company === null) {
+            abort(403, __('auth.no_company'));
+        }
+
+        if ($user->active_company_id !== $employment->company_id) {
+            $user->forceFill(['active_company_id' => $employment->company_id])->saveQuietly();
+        }
+
+        $this->tenant->set($employment->company);
+        $user->setRelation('activeCompany', $employment->company);
+
+        View::share('currentCompany', $employment->company);
+        View::share('currentRole', $employment->role());
+
+        return $next($request);
+    }
+}
