@@ -14,7 +14,9 @@ use App\Models\User;
 use App\Services\AssignmentService;
 use App\Services\Push\PushDriver;
 use App\Services\TaskService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -108,6 +110,23 @@ class CourierMobileApiTest extends TestCase
 
         $this->assertSame('completed', $task->fresh()->status_category_slug->value);
         $this->assertSame(1, $task->statusLogs()->where('status_category_slug', 'completed')->count());
+    }
+
+    public function test_proof_photo_uploads_and_shows_in_the_app(): void
+    {
+        Storage::fake('local');
+        $company = $this->makeCompany();
+        $courier = $this->makeCourier($company);
+        $task = $this->assigned($company, $courier);
+        $this->tokenFor($courier);
+
+        $url = $this->post(self::BASE."/tasks/{$task->id}/pods", ['type' => 'photo', 'file' => UploadedFile::fake()->image('p.jpg', 800, 600)], ['Accept' => 'application/json'])
+            ->assertOk()->json('pods.0.url');
+
+        // The signed link works with the app's token, not without it.
+        $this->get($url)->assertOk();
+        $this->app['auth']->forgetGuards();
+        $this->withoutToken()->get($url, ['Accept' => 'application/json'])->assertUnauthorized();
     }
 
     public function test_another_companys_task_is_invisible(): void

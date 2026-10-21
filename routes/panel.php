@@ -109,4 +109,5 @@ Route::prefix('courier')->name('courier.')->group(function () {
 });
 
 // Proof-of-delivery files: signed, short-lived links for signed-in staff or the courier.
-Route::get('pods/{pod}', PodController::class)->middleware(['auth', 'tenant', 'signed'])->name('pods.show');
+// Panel session or the courier app's token (the app shows the proof it just uploaded).
+Route::get('pods/{pod}', PodController::class)->middleware(['auth:web,sanctum', 'tenant', 'signed'])->name('pods.show');
