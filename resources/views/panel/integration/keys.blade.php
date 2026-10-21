@@ -86,7 +86,10 @@
 
         {{-- Recipient tracking: what a shop shows its own customers. --}}
         <section class="plate xl:col-span-2">
-            <div class="plate-head"><h2 class="t-label text-[var(--text)]">{{ __('Recipient tracking') }}</h2></div>
+            <div class="plate-head">
+                <h2 class="t-label text-[var(--text)]">{{ __('Recipient tracking') }}</h2>
+                <a href="{{ url('/demo-shop/') }}" target="_blank" rel="noopener" class="btn btn-sm ml-auto"><x-icon name="external-link" :size="14" />{{ __('See it in a demo shop') }}</a>
+            </div>
             <div class="grid gap-6 p-5 lg:grid-cols-3">
                 <div class="flex flex-col gap-2">
                     <p class="t-label">{{ __('1. Send the link') }}</p>

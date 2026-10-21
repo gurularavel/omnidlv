@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <base href="/demo-shop/">
+    <title>Sifarişim haradadır? · Nümunə Market</title>
+    <link rel="stylesheet" href="shop.css">
+    <!--
+        A stand-in for a customer's own online store. It knows nothing about OmniDLV except the
+        public tracking endpoint below; point `base` at the OmniDLV address when the shop is
+        hosted somewhere else.
+    -->
+    <script>window.OMNIDLV = { base: location.origin };</script>
+    <script src="shop.js" defer></script>
+</head>
+<body>
+<p class="demo-note">Demo: uydurma mağaza. Çatdırılma statusu OmniDLV API-dən canlı gəlir.</p>
+
+<header class="top">
+    <div class="wrap top-row">
+        <a class="logo" href="./" aria-label="Nümunə Market, ana səhifə"><span class="logo-mark" aria-hidden="true">N</span>Nümunə Market</a>
+        <nav class="nav" aria-label="Mağaza">
+            <a href="#" aria-disabled="true">Kataloq</a>
+            <a href="#" aria-disabled="true">Endirimlər</a>
+            <a href="./" aria-current="page">Sifarişlərim</a>
+        </nav>
+        <span class="account" aria-label="Hesab">AM</span>
+    </div>
+</header>
+
+<main class="wrap main">
+    <section class="track" aria-labelledby="track-title">
+        <h1 id="track-title">Sifarişim haradadır?</h1>
+        <p class="lede">İzləmə kodunu SMS-də və ya sifariş məktubunda tapa bilərsiniz. Kod yoxdursa, sifariş nömrəsi və telefonun son 4 rəqəmi ilə yoxlayın.</p>
+
+        <div class="tabs" role="tablist" aria-label="Axtarış üsulu">
+            <button type="button" role="tab" id="tab-code" aria-selected="true" aria-controls="form-code">İzləmə kodu</button>
+            <button type="button" role="tab" id="tab-order" aria-selected="false" aria-controls="form-order">Sifariş nömrəsi</button>
+        </div>
+
+        <form id="form-code" class="lookup" role="tabpanel" aria-labelledby="tab-code">
+            <label for="code">İzləmə kodu</label>
+            <div class="row">
+                <input id="code" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="OD7KQ2MXR4PA9C" required maxlength="32">
+                <button class="primary" type="submit">İzlə</button>
+            </div>
+        </form>
+
+        <form id="form-order" class="lookup" role="tabpanel" aria-labelledby="tab-order" hidden>
+            <div class="row two">
+                <div>
+                    <label for="order">Sifariş nömrəsi</label>
+                    <input id="order" name="order" autocomplete="off" placeholder="NM-10409" required maxlength="64">
+                </div>
+                <div>
+                    <label for="phone">Telefonun son 4 rəqəmi</label>
+                    <input id="phone" name="phone" inputmode="numeric" pattern="\d{4}" maxlength="4" placeholder="5590" required autocomplete="off">
+                </div>
+            </div>
+            <button class="primary wide" type="submit">İzlə</button>
+        </form>
+
+        <div id="result" class="result" aria-live="polite"></div>
+    </section>
+
+    <aside class="orders" aria-labelledby="orders-title">
+        <h2 id="orders-title">Son sifarişləriniz</h2>
+        <ul id="orders" class="order-list"><li class="muted">Yüklənir…</li></ul>
+    </aside>
+</main>
+
+<section class="wrap how" aria-labelledby="how-title">
+    <h2 id="how-title">Bu səhifə necə qoşulub?</h2>
+    <p>Mağaza OmniDLV-yə sifarişi API ilə göndərir və cavabda <code>tracking_code</code> alır. Müştəri səhifəsi isə açar tələb etməyən bir sorğu ilə statusu oxuyur:</p>
+    <pre><code>GET /api/tracking?code=OD7KQ2MXR4PA9C
+GET /api/tracking?order=NM-10409&amp;phone=5590
+
+fetch(OMNIDLV + '/api/tracking?code=' + code)
+  .then(r =&gt; r.json())
+  .then(t =&gt; t.status.category) // created | pool | assigned | in_progress
+                                //  | on_delivery | completed | cancelled | failed</code></pre>
+    <p class="muted">Ad və telefon maskalı gəlir; kuryerin yeri yalnız sifariş yolda olanda göstərilir.</p>
+</section>
+
+<footer class="wrap foot">© Nümunə Market · demo · Çatdırılma: OmniDLV</footer>
+</body>
+</html>

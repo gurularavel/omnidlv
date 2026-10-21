@@ -11,6 +11,9 @@ Route::get('track', [TrackingPageController::class, 'lookup'])
     ->middleware('throttle:tracking-lookup')
     ->name('tracking.lookup');
 
+// Demo store that shows how a shop embeds tracking (static files in public/demo-shop).
+Route::redirect('demo-shop', '/demo-shop/index.html');
+
 Route::get('t/{code}', [TrackingPageController::class, 'show'])
     ->middleware('throttle:tracking')
     ->name('tracking.show');
