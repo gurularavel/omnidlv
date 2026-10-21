@@ -9,6 +9,7 @@ use App\Http\Controllers\Panel\CourierController;
 use App\Http\Controllers\Panel\DashboardController;
 use App\Http\Controllers\Panel\HubController;
 use App\Http\Controllers\Panel\IntegrationController;
+use App\Http\Controllers\Panel\PlanController;
 use App\Http\Controllers\Panel\PodController;
 use App\Http\Controllers\Panel\SettingsController;
 use App\Http\Controllers\Panel\SmsLogController;
@@ -46,6 +47,11 @@ Route::prefix('app')->middleware(['auth', 'tenant', $staff])->group(function () 
     Route::post('tasks/{task}/status', [TaskController::class, 'status'])->name('tasks.status');
     Route::post('tasks/{task}/assign', [TaskController::class, 'assign'])->name('tasks.assign');
     Route::post('tasks/{task}/lock', [TaskController::class, 'lock'])->name('tasks.lock');
+
+    Route::get('plans', [PlanController::class, 'index'])->name('plans.index');
+    Route::post('plans/close', [PlanController::class, 'close'])->middleware('throttle:20,1')->name('plans.close');
+    Route::get('plans/{plan}', [PlanController::class, 'show'])->name('plans.show');
+    Route::post('plans/{plan}/move', [PlanController::class, 'move'])->name('plans.move');
 
     Route::resource('hubs', HubController::class)->except('show');
     Route::resource('teams', TeamController::class)->except('show');

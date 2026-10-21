@@ -97,6 +97,13 @@ docker run -t -v $PWD:/data ghcr.io/project-osrm/osrm-backend osrm-customize /da
 - Aylıq yeniləmə: cron ilə yeni extract yaradılır, sonra konteyner dəyişdirilir (blue/green, kəsintisiz).
 - Firewall: `5000` və `3000` portları yalnız `10.10.17.1`-dən açıq olur.
 
+**Tətbiqə qoşulma.** VM hazır olanda yalnız prod `.env`-ə bu sətirlər əlavə olunur (kod dəyişmir):
+```
+OSRM_CAR_URL=http://<vm-ip>:5000
+VROOM_URL=http://<vm-ip>:3000
+```
+VM olmayana və ya cavab vermədiyi müddətdə tətbiq dayanmır: məsafəni düz xətt üzərindən təxmin edir, marşrutları daxili planlayıcı qurur. Panel bunu "düz xətt təxmini" kimi göstərir.
+
 ### 2.3 `t1007-web01` paketləri
 
 | Nə | Niyə | Komanda | Məcburidir? |

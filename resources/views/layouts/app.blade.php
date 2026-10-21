@@ -3,6 +3,7 @@
     $nav = [
         ['dashboard', 'map-pinned', __('Live monitor'), 'dashboard'],
         ['tasks.index', 'list-checks', __('Tasks'), 'tasks.*'],
+        ['plans.index', 'route', __('planning.title'), 'plans.*'],
         ['couriers.index', 'truck', __('Couriers'), 'couriers.*'],
         ['hubs.index', 'warehouse', __('Hubs'), 'hubs.*'],
         ['teams.index', 'users', __('Teams'), 'teams.*'],

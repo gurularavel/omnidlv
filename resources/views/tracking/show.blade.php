@@ -47,7 +47,11 @@
         @if ($t['type_slug'] === 'pickup')<p class="mt-2 text-[var(--text-2)]">{{ __('Your pickup') }}</p>@endif
         @if ($t['status']['description'])<p class="mt-2 text-[var(--text-2)]">{{ $t['status']['description'] }}</p>@endif
         @unless ($t['is_final'])
-            <p class="t-value mt-2">{{ __('Expected by :time', ['time' => $fmt($t['ends_at'])]) }}</p>
+            @if ($t['eta_at'] ?? null)
+                <p class="t-value mt-2">{{ __('Expected around :time', ['time' => $fmt($t['eta_at'])]) }}</p>
+            @else
+                <p class="t-value mt-2">{{ __('Expected by :time', ['time' => $fmt($t['ends_at'])]) }}</p>
+            @endif
         @endunless
     </section>
 

@@ -180,4 +180,22 @@ Alpine.data('routePreview', (points, ink) => ({
     },
 }));
 
+// One courier's planned route: road geometry when the router drew it, stop to stop otherwise.
+Alpine.data('planMap', (plan) => ({
+    init() {
+        const map = createMap(this.$refs.map, { zoom: 12 });
+        const stops = plan.stops.map((s) => [s.lat, s.lng]);
+        const hub = plan.hub ? [plan.hub.lat, plan.hub.lng] : null;
+        const line = plan.geometry.length > 1 ? plan.geometry : [...(hub ? [hub] : []), ...stops];
+
+        if (line.length > 1) transitLine(line, plan.ink).addTo(map);
+        if (hub) interchange(hub, plan.hub.label).addTo(map);
+        plan.stops.forEach((s) => station([s.lat, s.lng], plan.ink, { done: s.done, label: s.label }).addTo(map));
+
+        const bounds = [...line, ...stops];
+        if (bounds.length) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+        setTimeout(() => map.invalidateSize(), 50);
+    },
+}));
+
 Alpine.start();

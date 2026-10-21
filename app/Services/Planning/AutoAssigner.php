@@ -36,6 +36,7 @@ class AutoAssigner
             return null;
         }
 
+        $task->loadMissing('hub');
         $options = (array) $task->assignment_options;
         $aware = $task->assignment_type === AssignmentType::CapacityAware;
 

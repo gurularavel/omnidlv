@@ -76,6 +76,8 @@ class TrackingService
             'destination_lng' => $task->destination_lng,
             'starts_at' => $task->starts_at,
             'ends_at' => $task->ends_at,
+            // Planned arrival from the route plan; only shown while the task is still open.
+            'eta_at' => $task->isFinal() ? null : $task->eta_at,
             'status_at' => $task->status_at,
             'quantity' => $task->quantity,
             'is_final' => $category->isFinal(),

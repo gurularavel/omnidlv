@@ -239,6 +239,34 @@ class PlanningApiTest extends TestCase
         $this->withHeaders($this->apiHeaders($this->makeCompany()))->getJson("/api/integration/task-plans/{$planId}")->assertNotFound();
     }
 
+    public function test_dispatcher_plans_a_slot_and_reorders_stops_in_the_panel(): void
+    {
+        $company = $this->makeCompany(['timezone' => 'Asia/Baku']);
+        $owner = $this->makeStaff($company);
+        $hub = $this->makeHub($company, ['lat' => 40.3777, 'lng' => 49.8436]);
+        $this->couriersOnShift($company, $hub, 1);
+        $this->slotTasks($company, $hub, 3);
+
+        $this->actingAs($owner)->get('/app/plans')->assertOk()->assertSee(self::SLOT)->assertSee('12:00–14:00');
+
+        $this->actingAs($owner)->post('/app/plans/close', [
+            'slot' => self::SLOT, 'hub_id' => $hub->id, 'shift' => 'working', 'tour' => 1, 'dispatch_early' => 0, 'from_hub' => 1,
+        ])->assertRedirect('/app/plans?date=2026-10-21')->assertSessionHas('status');
+
+        $plan = TaskPlan::withoutGlobalScopes()->sole();
+        $order = Task::withoutGlobalScopes()->where('plan_id', $plan->id)->orderBy('route_order')->pluck('id')->all();
+
+        $this->actingAs($owner)->get('/app/plans?date=2026-10-21')->assertOk()->assertSee(route('plans.show', $plan), false);
+        $this->actingAs($owner)->get("/app/plans/{$plan->id}")->assertOk()->assertSee('planMap', false);
+
+        $this->actingAs($owner)->post("/app/plans/{$plan->id}/move", ['task_id' => $order[2], 'direction' => 'up'])->assertRedirect();
+
+        $this->assertSame([$order[0], $order[2], $order[1]], Task::withoutGlobalScopes()->where('plan_id', $plan->id)->orderBy('route_order')->pluck('id')->all());
+        $this->assertSame('manual', $plan->fresh()->solver);
+
+        $this->actingAs($this->makeStaff($this->makeCompany()))->get("/app/plans/{$plan->id}")->assertNotFound();
+    }
+
     /** @return list<User> */
     private function couriersOnShift(Company $company, Hub $hub, int $count, ?int $capacity = null): array
     {

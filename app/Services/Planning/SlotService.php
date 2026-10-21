@@ -293,7 +293,7 @@ class SlotService
                 })->first();
 
                 $task->forceFill(['plan_id' => $plan->id, 'route_order' => $plan->tasks()->max('route_order') + 1])->save();
-                $this->assignments->assign($task, $plan->courier, $channel, $actor, ignoreCapacity: true);
+                $this->assignments->assign($task, $plan->loadMissing('courier')->courier, $channel, $actor, ignoreCapacity: true);
                 $this->retime($plan, $plan->tasks()->get());
                 $assigned++;
 
@@ -354,6 +354,7 @@ class SlotService
     /** Recomputes ETAs and totals along the plan's current stop order. */
     private function retime(TaskPlan $plan, Collection $tasks): void
     {
+        $plan->loadMissing('courier.courierDetail');
         $start = $plan->start ? new GeoPoint($plan->start[0], $plan->start[1]) : null;
         $profile = $plan->courier?->courierDetail?->vehicle_type_slug?->routingProfile() ?? 'car';
 
