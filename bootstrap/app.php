@@ -6,6 +6,7 @@ use App\Http\Middleware\NormalizeBearerToken;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetTenantFromToken;
 use App\Http\Middleware\SetTenantFromUser;
+use App\Http\Middleware\TrustCloudflare;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -32,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'courier.token' => EnsureCourierToken::class,
         ]);
 
+        $middleware->prepend(TrustCloudflare::class);
         $middleware->web(append: [SetLocale::class]);
         $middleware->api(prepend: [NormalizeBearerToken::class], append: [SetLocale::class]);
 

@@ -54,6 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // Production runs behind Cloudflare: take the visitor IP and https from its headers (App\Http\Middleware\TrustCloudflare).
+    'behind_cloudflare' => (bool) env('BEHIND_CLOUDFLARE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
