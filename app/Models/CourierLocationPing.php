@@ -18,6 +18,7 @@ class CourierLocationPing extends Model
             'lng' => 'float',
             'speed' => 'float',
             'recorded_at' => 'datetime',
+            'is_mock' => 'boolean',
         ];
     }
 }

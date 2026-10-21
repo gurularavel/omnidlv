@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Geocoding\FakeGeocoder;
 use App\Services\Geocoding\Geocoder;
 use App\Services\Geocoding\NominatimGeocoder;
+use App\Services\Push\PushDriver;
 use App\Services\Routing\FallbackRouter;
 use App\Services\Routing\HaversineRouter;
 use App\Services\Routing\OsrmRouter;
@@ -41,6 +42,13 @@ class AppServiceProvider extends ServiceProvider
                 'fake' => new FakeGeocoder,
                 default => new NominatimGeocoder($config['nominatim_url'], $config['user_agent'], $config['cache_days']),
             };
+        });
+
+        $this->app->singleton(PushDriver::class, function ($app) {
+            $driver = config('services.push.driver');
+            $class = config("services.push.drivers.{$driver}") ?? throw new \InvalidArgumentException("Unknown push driver [{$driver}].");
+
+            return $app->make($class);
         });
 
         // Routing servers are optional: with no URL configured the built-in estimate and solver run.

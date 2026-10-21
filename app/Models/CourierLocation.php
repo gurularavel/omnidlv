@@ -25,6 +25,8 @@ class CourierLocation extends Model
             'lng' => 'float',
             'speed' => 'float',
             'last_seen_at' => 'datetime',
+            'fixed_at' => 'datetime',
+            'is_mock' => 'boolean',
         ];
     }
 

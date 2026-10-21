@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Employment;
+use App\Models\User;
 use App\Support\CurrentCompany;
 use Closure;
 use Illuminate\Http\Request;
@@ -17,6 +18,10 @@ class SetTenantFromUser
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
+
+        if (! $user instanceof User) {
+            abort(401);
+        }
 
         $employment = Employment::withoutGlobalScopes()
             ->with('company')

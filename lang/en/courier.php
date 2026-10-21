@@ -16,4 +16,11 @@ return [
         'no_code' => 'This order has no delivery code.',
         'code_locked' => 'Too many wrong codes. Call the dispatcher.',
     ],
+    'deletion_requested' => 'Request received. Your company will delete your account within 30 days.',
+    'push' => [
+        'assigned_title' => 'New task',
+        'assigned_body' => 'Address: :address',
+        'cancelled_title' => 'Task cancelled',
+        'cancelled_body' => ':code is no longer yours.',
+    ],
 ];

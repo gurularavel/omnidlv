@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureCourierToken;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\NormalizeBearerToken;
 use App\Http\Middleware\SetLocale;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant' => SetTenantFromUser::class,
             'tenant.token' => SetTenantFromToken::class,
             'role' => EnsureRole::class,
+            'courier.token' => EnsureCourierToken::class,
         ]);
 
         $middleware->web(append: [SetLocale::class]);
@@ -37,6 +39,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // resolved without the company scope and could load another company's record.
         $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: SetTenantFromUser::class);
         $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: SetTenantFromToken::class);
+        // The courier-app token check must reject company keys before the user tenant is resolved.
+        $middleware->prependToPriorityList(before: SetTenantFromUser::class, prepend: EnsureCourierToken::class);
 
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('courier', 'courier/*') ? route('courier.login') : route('login'));
         $middleware->redirectUsersTo(fn (Request $request) => $request->user()?->isCourier() ? route('courier.home') : route('dashboard'));

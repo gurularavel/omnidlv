@@ -7,6 +7,7 @@ use App\Events\CourierLocationUpdated;
 use App\Events\CourierWorkingStatusChanged;
 use App\Exceptions\DomainException;
 use App\Models\CourierLocation;
+use App\Models\CourierLocationPing;
 use App\Models\CourierShift;
 use App\Models\Status;
 use App\Models\Task;
@@ -18,6 +19,7 @@ use App\Services\StatusMachine;
 use App\Support\CurrentCompany;
 use App\Support\GeoPoint;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -116,6 +118,8 @@ class CourierWorkService
             'is_online' => true,
             'on_duty' => Task::query()->where('courier_id', $courier->id)->active()->exists(),
             'last_seen_at' => now(),
+            'fixed_at' => now(),
+            'is_mock' => false,
         ])->save();
 
         if (Cache::add("ping:{$courier->id}", 1, 10)) {
@@ -132,6 +136,89 @@ class CourierWorkService
         if (Cache::add("ping-broadcast:{$courier->id}", 1, 15)) {
             CourierLocationUpdated::dispatch($this->tenant->getOrFail()->id, $courier->id, $at);
         }
+    }
+
+    /**
+     * GPS fixes from the native app, sent in batches and possibly hours late after the phone
+     * was offline. History keeps one fix per 10 s of phone time; the "current" position only
+     * moves forward, so a late batch of old fixes never drags the courier back on the map.
+     *
+     * @param  list<array{point: GeoPoint, recorded_at: Carbon, heading?: ?int, speed?: ?float, accuracy?: ?int, battery?: ?int, is_mock?: bool}>  $fixes
+     * @return int fixes stored in history
+     */
+    public function pingBatch(User $courier, array $fixes): int
+    {
+        $fixes = collect($fixes)
+            ->filter(fn ($f) => $f['recorded_at']->between(now()->subDay(), now()->addMinutes(2)))
+            ->sortBy(fn ($f) => $f['recorded_at']->getTimestamp())
+            ->values();
+
+        $location = $this->location($courier);
+        $location->fill([
+            'is_online' => true,
+            'on_duty' => Task::query()->where('courier_id', $courier->id)->active()->exists(),
+            'last_seen_at' => now(),
+        ]);
+
+        if ($fixes->isEmpty()) {
+            $location->save();
+
+            return 0;
+        }
+
+        $last = $courier->locationPings()->max('recorded_at');
+        $previous = $last ? Carbon::parse($last) : null;
+        $rows = [];
+
+        foreach ($fixes as $fix) {
+            if ($previous !== null && abs($fix['recorded_at']->getTimestamp() - $previous->getTimestamp()) < 10) {
+                continue;
+            }
+
+            $rows[] = [
+                'user_id' => $courier->id,
+                'lat' => $fix['point']->lat,
+                'lng' => $fix['point']->lng,
+                'heading' => $fix['heading'] ?? null,
+                'speed' => $fix['speed'] ?? null,
+                'accuracy' => $fix['accuracy'] ?? null,
+                'battery' => $fix['battery'] ?? null,
+                'is_mock' => (bool) ($fix['is_mock'] ?? false),
+                'recorded_at' => $fix['recorded_at'],
+            ];
+            $previous = $fix['recorded_at'];
+        }
+
+        if ($rows !== []) {
+            CourierLocationPing::query()->insert($rows);
+        }
+
+        $newest = $fixes->last();
+        $isNewer = $location->fixed_at === null || $newest['recorded_at']->gte($location->fixed_at);
+
+        if ($isNewer) {
+            $location->fill([
+                'lat' => $newest['point']->lat,
+                'lng' => $newest['point']->lng,
+                'heading' => $newest['heading'] ?? null,
+                'speed' => $newest['speed'] ?? null,
+                'accuracy' => $newest['accuracy'] ?? null,
+                // Not every fix carries the battery level; keep the latest one that did.
+                'battery' => $fixes->pluck('battery')->filter(fn ($b) => $b !== null)->last() ?? $location->battery,
+                'is_mock' => (bool) ($newest['is_mock'] ?? false),
+                'fixed_at' => $newest['recorded_at'],
+            ]);
+        }
+
+        $location->save();
+
+        // Only a fresh fix is worth pushing to the live map and to webhooks.
+        $fresh = $newest['recorded_at']->gte(now()->subMinutes(2));
+        if ($isNewer && $fresh && Cache::add("ping-broadcast:{$courier->id}", 1, 15)) {
+            CourierLocationUpdated::dispatch($this->tenant->getOrFail()->id, $courier->id, $newest['point']);
+        }
+
+        return count($rows);
     }
 
     /** Forward step (pickup / depart / arrive). */

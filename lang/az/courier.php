@@ -16,4 +16,11 @@ return [
         'no_code' => 'Bu sifarişin təhvil kodu yoxdur.',
         'code_locked' => 'Çox sayda yanlış kod. Dispetçerə zəng edin.',
     ],
+    'deletion_requested' => 'Sorğunuz qəbul edildi. Şirkətiniz hesabınızı 30 gün ərzində siləcək.',
+    'push' => [
+        'assigned_title' => 'Yeni tapşırıq',
+        'assigned_body' => 'Ünvan: :address',
+        'cancelled_title' => 'Tapşırıq ləğv olundu',
+        'cancelled_body' => ':code artıq sizdə deyil.',
+    ],
 ];

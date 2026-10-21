@@ -16,4 +16,11 @@ return [
         'no_code' => 'Bu siparişin teslimat kodu yok.',
         'code_locked' => 'Çok fazla yanlış kod. Dispeçeri arayın.',
     ],
+    'deletion_requested' => 'Talebiniz alındı. Şirketiniz hesabınızı 30 gün içinde silecek.',
+    'push' => [
+        'assigned_title' => 'Yeni görev',
+        'assigned_body' => 'Adres: :address',
+        'cancelled_title' => 'Görev iptal edildi',
+        'cancelled_body' => ':code artık sizde değil.',
+    ],
 ];

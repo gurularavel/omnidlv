@@ -37,6 +37,10 @@ class OtpService
             return null;
         }
 
+        if ($this->isReviewPhone($phone)) {
+            return null; // store reviewer: fixed code, no SMS
+        }
+
         CourierOtp::query()->where('phone', $phone)->whereNull('consumed_at')->update(['consumed_at' => now()]);
 
         $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -56,6 +60,14 @@ class OtpService
     public function verify(string $rawPhone, string $code): User
     {
         $phone = $this->phone($rawPhone);
+
+        if ($this->isReviewPhone($phone)) {
+            if (! hash_equals((string) config('courier_app.review.code'), $code)) {
+                throw ValidationException::withMessages(['code' => __('courier.otp_wrong', ['left' => self::MAX_ATTEMPTS])]);
+            }
+
+            return $this->courier($phone) ?? throw ValidationException::withMessages(['code' => __('courier.not_a_courier')]);
+        }
 
         $otp = CourierOtp::query()
             ->where('phone', $phone)
@@ -81,6 +93,15 @@ class OtpService
         $otp->forceFill(['consumed_at' => now()])->save();
 
         return $this->courier($phone) ?? throw ValidationException::withMessages(['code' => __('courier.not_a_courier')]);
+    }
+
+    /** The App Store / Play reviewer number (config courier_app.review), when both parts are set. */
+    private function isReviewPhone(string $phone): bool
+    {
+        $review = config('courier_app.review');
+
+        return filled($review['phone'] ?? null) && filled($review['code'] ?? null)
+            && Phone::normalize((string) $review['phone'], 'AZ') === $phone;
     }
 
     private function phone(string $raw): string

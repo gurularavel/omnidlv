@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Push\LogPushDriver;
 use App\Services\Sms\DemoSmsDriver;
 
 return [
@@ -64,6 +65,14 @@ return [
         'vroom_url' => env('VROOM_URL'),
         'timeout' => (int) env('OSRM_TIMEOUT', 10),
         'solve_timeout' => (int) env('VROOM_TIMEOUT', 60),
+    ],
+
+    // Push to the native courier app. "log" only writes to the log; FCM comes with Firebase.
+    'push' => [
+        'driver' => env('PUSH_DRIVER', 'log'),
+        'drivers' => [
+            'log' => LogPushDriver::class,
+        ],
     ],
 
     'webhooks' => [
