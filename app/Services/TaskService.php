@@ -14,6 +14,7 @@ use App\Models\Task;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Geocoding\Geocoder;
+use App\Services\Planning\AutoAssigner;
 use App\Support\CurrentCompany;
 use App\Support\GeoPoint;
 use App\Support\Phone;
@@ -54,6 +55,7 @@ class TaskService
         private readonly Geocoder $geocoder,
         private readonly StatusMachine $statuses,
         private readonly AssignmentService $assignments,
+        private readonly AutoAssigner $autoAssigner,
         private readonly CurrentCompany $tenant,
     ) {}
 
@@ -110,7 +112,9 @@ class TaskService
                     $task, User::query()->findOrFail($data['assignment']['courier_id']), $channel, $actor,
                 ),
                 AssignmentType::Pool => $this->statuses->toCategory($task, StatusCategory::Pool, $channel, $actor),
-                // Capacity-based and slot strategies are resolved by the assignment engine / slot close.
+                // No eligible courier now: the task waits in Created for tasks:assign-pending.
+                AssignmentType::CapacityAware, AssignmentType::CapacityUnaware => $this->autoAssigner->assign($task),
+                // Slot tasks wait for their slot to close (SlotService).
                 default => null,
             };
 

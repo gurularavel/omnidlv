@@ -43,6 +43,7 @@ class Task extends Model
             'claimed_at' => 'datetime',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
+            'eta_at' => 'datetime',
             'delivery_code_sent_at' => 'datetime',
             'delivery_code_verified_at' => 'datetime',
             'origin_lat' => 'float',
@@ -93,6 +94,11 @@ class Task extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(TaskPlan::class, 'plan_id');
     }
 
     public function status(): BelongsTo

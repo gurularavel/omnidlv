@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Api\Integration\CourierController;
 use App\Http\Controllers\Api\Integration\HubController;
+use App\Http\Controllers\Api\Integration\RoutingController;
 use App\Http\Controllers\Api\Integration\TaskController;
 use App\Http\Controllers\Api\Integration\TaskItemController;
+use App\Http\Controllers\Api\Integration\TaskPlanController;
+use App\Http\Controllers\Api\Integration\TaskSlotController;
 use App\Http\Controllers\Api\Integration\TaskStatusController;
 use App\Http\Controllers\Api\Integration\TeamController;
 use App\Http\Controllers\Api\TrackingController;
@@ -37,4 +40,14 @@ Route::prefix('integration')
         Route::patch('task-status/{task}', [TaskStatusController::class, 'update'])->name('tasks.status');
 
         Route::apiResource('tasks.items', TaskItemController::class)->scoped();
+
+        Route::get('task-slots', [TaskSlotController::class, 'index'])->name('slots.index');
+        Route::post('task-slots/shift', [TaskSlotController::class, 'shift'])->name('slots.shift');
+        Route::post('task-slots/{slot}/close', [TaskSlotController::class, 'close'])->middleware('throttle:20,1')->name('slots.close');
+
+        Route::get('task-plans', [TaskPlanController::class, 'index'])->name('plans.index');
+        Route::get('task-plans/{plan}', [TaskPlanController::class, 'show'])->whereNumber('plan')->name('plans.show');
+
+        Route::post('routing/distance', [RoutingController::class, 'distance'])->name('routing.distance');
+        Route::post('routing/solve', [RoutingController::class, 'solve'])->middleware('throttle:30,1')->name('routing.solve');
     });

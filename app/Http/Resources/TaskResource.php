@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Task in QDelivery's integration shape. Field names match the QDelivery API so existing
  * integrations can switch base URL and key without code changes.
  *
- * @mixin \App\Models\Task
+ * @mixin Task
  */
 class TaskResource extends JsonResource
 {
@@ -74,6 +75,7 @@ class TaskResource extends JsonResource
             'route_order' => $this->route_order,
             'distance' => $this->distance,
             'duration' => $this->duration,
+            'eta_at' => $this->eta_at,
             'rating' => $this->rating,
             'comment' => $this->comment,
             'was_finalized_duly' => $this->was_finalized_duly,

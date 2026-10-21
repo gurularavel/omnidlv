@@ -54,6 +54,18 @@ return [
         'sender' => env('SMS_SENDER', 'OmniDLV'),
     ],
 
+    // Self-hosted OSRM (one URL per profile) and vroom-express. Empty = built-in straight-line
+    // estimate and insertion solver (see App\Services\Routing).
+    'routing' => [
+        'osrm' => [
+            'car' => env('OSRM_CAR_URL'),
+            'truck' => env('OSRM_TRUCK_URL'),
+        ],
+        'vroom_url' => env('VROOM_URL'),
+        'timeout' => (int) env('OSRM_TIMEOUT', 10),
+        'solve_timeout' => (int) env('VROOM_TIMEOUT', 60),
+    ],
+
     'webhooks' => [
         // Local development only: lets a webhook hit http:// and LAN/loopback receivers.
         'allow_http' => (bool) env('WEBHOOKS_ALLOW_HTTP', false),

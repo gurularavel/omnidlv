@@ -5,14 +5,19 @@ namespace App\Providers;
 use App\Services\Geocoding\FakeGeocoder;
 use App\Services\Geocoding\Geocoder;
 use App\Services\Geocoding\NominatimGeocoder;
+use App\Services\Routing\FallbackRouter;
+use App\Services\Routing\HaversineRouter;
+use App\Services\Routing\OsrmRouter;
+use App\Services\Routing\RoutingService;
+use App\Services\Routing\VroomSolver;
 use App\Services\Sms\SmsDriver;
 use App\Support\CurrentCompany;
 use App\View\Components\Icon;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,6 +41,19 @@ class AppServiceProvider extends ServiceProvider
                 'fake' => new FakeGeocoder,
                 default => new NominatimGeocoder($config['nominatim_url'], $config['user_agent'], $config['cache_days']),
             };
+        });
+
+        // Routing servers are optional: with no URL configured the built-in estimate and solver run.
+        $this->app->singleton(FallbackRouter::class, function () {
+            $osrm = array_filter(config('services.routing.osrm', []));
+
+            return new FallbackRouter($osrm ? new OsrmRouter($osrm, config('services.routing.timeout')) : null, new HaversineRouter);
+        });
+
+        $this->app->singleton(RoutingService::class, function ($app) {
+            $vroom = config('services.routing.vroom_url');
+
+            return new RoutingService($app->make(FallbackRouter::class), $vroom ? new VroomSolver($vroom, config('services.routing.solve_timeout')) : null);
         });
     }
 
