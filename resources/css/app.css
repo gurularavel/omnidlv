@@ -72,6 +72,12 @@
         --focus: var(--color-ink-amber);
         --danger-text: var(--color-ink-scarlet-text);
         --risk-text: var(--color-ink-amber);
+        /* Charts: outcomes keep their status meaning; single measures stay neutral porcelain. */
+        --chart-delivered: var(--color-ink-green);
+        --chart-failed: var(--color-ink-scarlet);
+        --chart-cancelled: var(--color-porcelain-mute);
+        --chart-line: var(--color-porcelain);
+        --chart-neutral: var(--color-porcelain-dim);
         color-scheme: dark;
     }
 
@@ -516,6 +522,49 @@
         border-radius: 8px;
         border: 1.5px solid var(--hairline-strong);
         background: var(--surface-raised);
+    }
+
+    /* Analytics charts (resources/js/charts.js). */
+    .chart {
+        position: relative;
+        min-height: 180px;
+    }
+
+    .chart-tick {
+        font-family: var(--font-display);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        fill: var(--text-3);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .chart-col { outline: none; cursor: default; }
+    .chart-col.is-hot path { filter: brightness(1.25); }
+    .chart-col:focus-visible rect { stroke: var(--focus); stroke-width: 2px; }
+
+    .chart-tip {
+        position: absolute;
+        top: 0;
+        z-index: 5;
+        min-width: 140px;
+        padding: 8px 10px;
+        border: 1.5px solid var(--outline);
+        border-radius: 6px;
+        background: var(--surface);
+        box-shadow: 0 12px 32px rgb(0 0 0 / 0.4);
+        pointer-events: none;
+        font-size: 13px;
+    }
+
+    .chart-tip-title { color: var(--text-2); margin-bottom: 4px; }
+    .chart-tip-row { display: flex; align-items: center; gap: 8px; }
+    .chart-tip-row strong { font-weight: 600; color: var(--text); min-width: 2.5ch; text-align: right; }
+    .chart-tip-row span:last-child { color: var(--text-2); }
+    .chart-tip-key { width: 12px; height: 3px; border-radius: 2px; flex: none; }
+
+    .legend-key { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+    .legend-key.is-hatched {
+        background: repeating-linear-gradient(45deg, var(--chart-failed) 0 3px, color-mix(in oklab, var(--chart-failed) 50%, var(--surface-raised)) 3px 5px);
     }
 }
 

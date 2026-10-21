@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Courier\AppController as CourierAppController;
 use App\Http\Controllers\Courier\AuthController as CourierAuthController;
+use App\Http\Controllers\Panel\AnalyticsController;
 use App\Http\Controllers\Panel\CourierController;
 use App\Http\Controllers\Panel\DashboardController;
 use App\Http\Controllers\Panel\HubController;
@@ -42,6 +43,9 @@ Route::prefix('app')->middleware(['auth', 'tenant', $staff])->group(function () 
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('live', [DashboardController::class, 'live'])->name('dashboard.live');
+
+    Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('analytics/export', [AnalyticsController::class, 'export'])->middleware('throttle:10,1')->name('analytics.export');
 
     Route::resource('tasks', TaskController::class)->except('destroy');
     Route::post('tasks/{task}/status', [TaskController::class, 'status'])->name('tasks.status');

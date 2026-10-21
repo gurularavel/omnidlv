@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class DemoSeeder extends Seeder
 {
-    private const ADDRESSES = [
+    public const ADDRESSES = [
         ['Nizami küç. 10', 40.3777, 49.8436], ['Ə. Rəcəbli küç. 44', 40.4046, 49.8789], ['Babək pr. 21', 40.3989, 49.8932],
         ['Neftçilər pr. 153', 40.3734, 49.8596], ['H. Əliyev pr. 88', 40.4012, 49.9425], ['Füzuli küç. 49', 40.3781, 49.8392],
         ['Səməd Vurğun küç. 34', 40.3802, 49.8481], ['Atatürk pr. 37', 40.4089, 49.8583], ['Tbilisi pr. 3', 40.3937, 49.8037],

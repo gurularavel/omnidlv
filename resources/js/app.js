@@ -4,6 +4,7 @@ import './echo';
 import { createMap, transitLine, station, interchange, courierMarker, L } from './map';
 import 'leaflet-draw'; // after ./map, which sets window.L
 import { initPhoneInputs } from './phone-input';
+import { columnChart, lineChart, responsive } from './charts';
 
 initPhoneInputs();
 
@@ -198,6 +199,27 @@ Alpine.data('planMap', (plan) => ({
         const bounds = [...line, ...stops];
         if (bounds.length) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
         setTimeout(() => map.invalidateSize(), 50);
+    },
+}));
+
+// Analytics: outcomes per day, on-time rate per day, deliveries by hour. Labels come from the page.
+Alpine.data('analyticsCharts', (data, labels) => ({
+    init() {
+        const outcomes = [
+            { key: 'delivered', label: labels.delivered, color: 'var(--chart-delivered)' },
+            { key: 'cancelled', label: labels.cancelled, color: 'var(--chart-cancelled)' },
+            { key: 'failed', label: labels.failed, color: 'var(--chart-failed)', hatch: true },
+        ];
+        const pct = (v) => `${Math.round(v)}%`;
+
+        responsive(this.$refs.outcomes, () => columnChart(this.$refs.outcomes, { points: data.series.points, series: outcomes }));
+        responsive(this.$refs.onTime, () => lineChart(this.$refs.onTime, {
+            points: data.series.points, key: 'on_time_rate', label: labels.on_time, color: 'var(--chart-line)', max: 100, format: pct,
+        }));
+        const hours = data.hours.map((h) => ({ ...h, short: String(h.hour).padStart(2, '0'), label: `${String(h.hour).padStart(2, '0')}:00–${String(h.hour).padStart(2, '0')}:59` }));
+        responsive(this.$refs.hours, () => columnChart(this.$refs.hours, {
+            points: hours, series: [{ key: 'delivered', label: labels.delivered, color: 'var(--chart-neutral)' }], height: 180,
+        }));
     },
 }));
 
