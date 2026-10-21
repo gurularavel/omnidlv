@@ -103,7 +103,7 @@ docker run -t -v $PWD:/data ghcr.io/project-osrm/osrm-backend osrm-customize /da
 |---|---|---|---|
 | PostGIS 3 (PG 16) | Komanda poliqonları və geo sorğular; böyük həcmdə sürət | `sudo apt install postgresql-16-postgis-3`, sonra DB-də `CREATE EXTENSION postgis;` | Xeyr. PostGIS olmasa PHP fallback var, amma böyük həcmdə yavaşdır |
 | phpredis (PHP 8.3) | Queue, cache və Reverb scaling Redis üzərindən | FASTPANEL → PHP 8.3 → Extensions → `redis`, və ya `pecl` | Tövsiyə olunur |
-| Supervisor proqramları | `omnidlv-queue`, `omnidlv-reverb` (:8082) | `/etc/supervisor/conf.d/omnidlv-*.conf` (biz hazırlayacağıq) | Bəli |
+| Supervisor proqramları | `omnidlv-queue` (`php artisan queue:work --queue=default,webhooks`: webhooklar ayrıca `webhooks` növbəsindədir, yavaş qəbuledici SMS-ləri gecikdirməsin), `omnidlv-reverb` (:8082) | `/etc/supervisor/conf.d/omnidlv-*.conf` (biz hazırlayacağıq) | Bəli |
 | Cron | `php artisan schedule:run` hər dəqiqə (sayt istifadəçisi ilə) | FASTPANEL → Cron | Bəli |
 
 ### 2.4 Domen, SSL, nginx
@@ -132,7 +132,7 @@ docker run -t -v $PWD:/data ghcr.io/project-osrm/osrm-backend osrm-customize /da
 | `download.geofabrik.de` | Routing VM | Aylıq OSM yeniləməsi |
 | SMS provayderinin API-si | Server | Status SMS-ləri |
 | SMTP | Server | E-poçt bildirişləri |
-| Müştərilərin webhook URL-ləri | Server | `task_status_changed` və s. (ixtiyari xarici HTTPS) |
+| Müştərilərin webhook URL-ləri | Server | `task_status_changed` və s. (ixtiyari xarici HTTPS). Daxili/LAN ünvanlara göndərmə kodda bloklanır (SSRF qoruması); prod `.env`-də `WEBHOOKS_ALLOW_PRIVATE_NETWORKS` və `WEBHOOKS_ALLOW_HTTP` yazılmamalıdır |
 
 ### 2.6 Monitorinq və backup
 

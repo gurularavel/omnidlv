@@ -4,11 +4,13 @@ namespace App\Services\Courier;
 
 use App\Enums\Channel;
 use App\Events\CourierLocationUpdated;
+use App\Events\CourierWorkingStatusChanged;
 use App\Exceptions\DomainException;
 use App\Models\CourierLocation;
 use App\Models\CourierShift;
 use App\Models\Status;
 use App\Models\Task;
+use App\Models\TaskItem;
 use App\Models\TaskPod;
 use App\Models\User;
 use App\Services\AssignmentService;
@@ -56,12 +58,18 @@ class CourierWorkService
                 'start_lng' => $at?->lng,
             ]);
 
-            $this->location($courier)->fill([
+            $location = $this->location($courier);
+            $wasWorking = (bool) $location->is_working;
+            $location->fill([
                 'is_working' => true,
                 'is_online' => true,
                 'last_seen_at' => now(),
                 ...($at ? ['lat' => $at->lat, 'lng' => $at->lng] : []),
             ])->save();
+
+            if (! $wasWorking) {
+                $this->workingChanged($courier, true);
+            }
 
             return $shift;
         });
@@ -74,7 +82,21 @@ class CourierWorkService
         }
 
         CourierShift::query()->where('user_id', $courier->id)->whereNull('ended_at')->update(['ended_at' => now()]);
-        $this->location($courier)->fill(['is_working' => false, 'on_duty' => false])->save();
+
+        $location = $this->location($courier);
+        $wasWorking = (bool) $location->is_working;
+        $location->fill(['is_working' => false, 'on_duty' => false])->save();
+
+        if ($wasWorking) {
+            $this->workingChanged($courier, false);
+        }
+    }
+
+    private function workingChanged(User $courier, bool $working): void
+    {
+        $companyId = $this->tenant->getOrFail()->id;
+
+        DB::afterCommit(fn () => CourierWorkingStatusChanged::dispatch($companyId, $courier->id, $working));
     }
 
     /**
@@ -210,7 +232,7 @@ class CourierWorkService
     }
 
     /** Marks an item as scanned when the barcode (or SKU) matches. */
-    public function scan(Task $task, User $courier, string $code): ?\App\Models\TaskItem
+    public function scan(Task $task, User $courier, string $code): ?TaskItem
     {
         $this->guardOwn($task, $courier);
         $code = trim($code);

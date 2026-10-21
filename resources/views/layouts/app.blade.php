@@ -9,6 +9,7 @@
     ];
     $admin = [
         ['integration.keys', 'plug', __('Integration'), 'integration.*'],
+        ['webhooks.index', 'webhook', __('Webhooks'), 'webhooks.*'],
         ['sms.index', 'message-square-text', __('SMS log'), 'sms.*'],
         ['settings.edit', 'settings-2', __('Settings'), 'settings.*'],
     ];

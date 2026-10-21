@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\Sms\DemoSmsDriver;
+
 return [
 
     /*
@@ -47,9 +49,20 @@ return [
     'sms' => [
         'driver' => env('SMS_DRIVER', 'demo'),
         'drivers' => [
-            'demo' => App\Services\Sms\DemoSmsDriver::class,
+            'demo' => DemoSmsDriver::class,
         ],
         'sender' => env('SMS_SENDER', 'OmniDLV'),
+    ],
+
+    'webhooks' => [
+        // Local development only: lets a webhook hit http:// and LAN/loopback receivers.
+        'allow_http' => (bool) env('WEBHOOKS_ALLOW_HTTP', false),
+        'allow_private_networks' => (bool) env('WEBHOOKS_ALLOW_PRIVATE_NETWORKS', false),
+        'timeout' => (int) env('WEBHOOKS_TIMEOUT', 10),
+        // An endpoint is switched off after this many deliveries in a row gave up.
+        'disable_after' => (int) env('WEBHOOKS_DISABLE_AFTER', 15),
+        // Minimum seconds between courier_location_updated webhooks for one courier.
+        'location_interval' => (int) env('WEBHOOKS_LOCATION_INTERVAL', 30),
     ],
 
     'geocoder' => [

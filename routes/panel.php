@@ -5,15 +5,16 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Courier\AppController as CourierAppController;
 use App\Http\Controllers\Courier\AuthController as CourierAuthController;
-use App\Http\Controllers\Panel\PodController;
-use App\Http\Controllers\Panel\SmsLogController;
 use App\Http\Controllers\Panel\CourierController;
 use App\Http\Controllers\Panel\DashboardController;
 use App\Http\Controllers\Panel\HubController;
 use App\Http\Controllers\Panel\IntegrationController;
+use App\Http\Controllers\Panel\PodController;
 use App\Http\Controllers\Panel\SettingsController;
+use App\Http\Controllers\Panel\SmsLogController;
 use App\Http\Controllers\Panel\TaskController;
 use App\Http\Controllers\Panel\TeamController;
+use App\Http\Controllers\Panel\WebhookController;
 use App\Http\Middleware\EnsureRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,15 @@ Route::prefix('app')->middleware(['auth', 'tenant', $staff])->group(function () 
         Route::get('integration', [IntegrationController::class, 'keys'])->name('integration.keys');
         Route::post('integration/keys', [IntegrationController::class, 'store'])->name('integration.keys.store');
         Route::delete('integration/keys/{token}', [IntegrationController::class, 'destroy'])->name('integration.keys.destroy');
+
+        Route::get('webhooks', [WebhookController::class, 'index'])->name('webhooks.index');
+        Route::post('webhooks', [WebhookController::class, 'store'])->name('webhooks.store');
+        Route::put('webhooks/{webhook}', [WebhookController::class, 'update'])->name('webhooks.update');
+        Route::delete('webhooks/{webhook}', [WebhookController::class, 'destroy'])->name('webhooks.destroy');
+        Route::post('webhooks/{webhook}/toggle', [WebhookController::class, 'toggle'])->name('webhooks.toggle');
+        Route::post('webhooks/{webhook}/rotate', [WebhookController::class, 'rotate'])->name('webhooks.rotate');
+        Route::post('webhooks/{webhook}/test', [WebhookController::class, 'test'])->middleware('throttle:10,1')->name('webhooks.test');
+        Route::post('webhook-deliveries/{delivery}/redeliver', [WebhookController::class, 'redeliver'])->middleware('throttle:30,1')->name('webhooks.redeliver');
 
         Route::get('sms', SmsLogController::class)->name('sms.index');
 
