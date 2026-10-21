@@ -80,6 +80,7 @@ Alpine.data('courierTask', (initial, labels) => {
         labels,
         busy: false,
         error: null,
+        notice: null,
         sheet: null,
         outcome: 'delivered',
         receivedBy: '',
@@ -96,6 +97,14 @@ Alpine.data('courierTask', (initial, labels) => {
             window.addEventListener('courier:queue', (e) => (this.queued = e.detail));
             window.addEventListener('courier:rejected', (e) => (this.error = e.detail.message));
             api.flush();
+
+            // "Hand over" on the home screen lands here with the confirmation already open.
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('handover')) {
+                url.searchParams.delete('handover');
+                history.replaceState(null, '', url);
+                if (this.t.next === 'complete' && this.t.can_complete) this.sheet = 'complete';
+            }
         },
 
         async run(promise) {
@@ -104,7 +113,8 @@ Alpine.data('courierTask', (initial, labels) => {
             try {
                 const res = await promise;
                 if (res && !res.queued && res.id) this.t = res;
-                if (res?.queued) this.error = null;
+                // Saved offline: say so plainly, or the courier walks away thinking it was sent.
+                if (res?.queued) this.error = labels.queued;
                 return res;
             } catch (e) {
                 this.error = message(e);
@@ -130,6 +140,10 @@ Alpine.data('courierTask', (initial, labels) => {
                 received_by: this.outcome === 'delivered_to_other' ? this.receivedBy : null,
             })));
             if (res) this.sheet = null;
+            if (res && !res.queued && res.final) {
+                this.notice = labels.handedOver;
+                setTimeout(() => (window.location.href = '/courier'), 1800);
+            }
         },
 
         async fail() {
@@ -287,7 +301,7 @@ Alpine.data('courierBoard', (initial, labels) => {
             const n = this.n;
             // Handing over needs proof (photo, signature, code): that lives on the task screen.
             if (n.next === 'complete') {
-                window.location.href = n.url;
+                window.location.href = `${n.url}?handover=1`;
                 return;
             }
             const action = { pickup: 'pickup', depart: 'depart', arrive: 'arrive' }[n.next];

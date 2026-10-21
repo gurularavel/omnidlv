@@ -1,11 +1,13 @@
 @php
     $completeOptions = ['delivered' => __('Handed to the recipient'), 'left_at_door' => __('Left at the door'), 'delivered_to_other' => __('Handed to someone else')];
     $failOptions = ['recipient_not_available' => __('Recipient not available'), 'wrong_address' => __('Wrong address'), 'refused' => __('Recipient refused'), 'damaged' => __('Item damaged'), 'failed' => __('Other reason')];
-    $nextLabels = ['claim' => __('Take this order'), 'pickup' => __('Picked up'), 'depart' => __('On my way'), 'arrive' => __('I have arrived'), 'complete' => __('Delivered')];
+    $nextLabels = ['claim' => __('Take this order'), 'pickup' => __('Picked up'), 'depart' => __('On my way'), 'arrive' => __('I have arrived'), 'complete' => __('Hand over')];
     $labels = [
         'completeOptions' => $completeOptions, 'failOptions' => $failOptions, 'nextLabels' => $nextLabels,
         'wrongCode' => __('Wrong code.'), 'scanned' => __('Scanned'), 'noMatch' => __('not in this order'),
         'cameraDenied' => __('The camera is not available. Type the code below.'),
+        'queued' => __('No connection: the handover is saved on this phone and will be sent when the network is back. Do not close the app.'),
+        'handedOver' => __('Handover saved. The customer sees it now.'),
     ];
 @endphp
 <x-layouts::courier :title="$initial['code']">
@@ -21,6 +23,9 @@
             <span x-show="queued > 0" class="tag ml-auto gap-1.5 border-ink-amber text-[var(--text)]"><x-icon name="refresh-cw" :size="13" /><span x-text="queued"></span></span>
         </header>
 
+        <div x-show="notice" class="mx-4 mt-4 flex gap-3 rounded-[var(--radius-plate)] border-[1.5px] border-ink-green bg-white p-3" role="status">
+            <x-icon name="circle-check-big" class="mt-0.5 shrink-0 text-ink-green" /><span x-text="notice"></span>
+        </div>
         <div x-show="error" x-transition class="mx-4 mt-4 flex gap-3 rounded-[var(--radius-plate)] border-[1.5px] border-ink-scarlet bg-white p-3" role="alert">
             <x-icon name="circle-alert" class="mt-0.5 shrink-0 text-[var(--danger-text)]" /><span x-text="error"></span>
         </div>
