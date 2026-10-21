@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\VehicleType;
 use App\Http\Requests\Concerns\TenantRules;
+use App\Rules\PhoneFormat;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +26,7 @@ class CourierRequest extends FormRequest
         return [
             'name' => [$required, 'string', 'max:191'],
             'phone_country' => ['nullable', 'string', 'size:2'],
-            'phone' => [$creating ? 'required' : 'required_with:phone_country', 'string', 'max:32'],
+            'phone' => [$creating ? 'required' : 'required_with:phone_country', 'string', 'max:32', new PhoneFormat],
             'email' => ['nullable', 'email', 'max:191'],
             'locale' => ['nullable', Rule::in(['az', 'en', 'ru', 'tr'])],
             'integration_id' => ['nullable', 'string', 'max:191'],

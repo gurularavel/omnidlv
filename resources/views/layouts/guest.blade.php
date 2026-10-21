@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#0b1230">
     <title>{{ $title }} · OmniDLV</title>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/phone-input-entry.js'])
 </head>
 <body class="h-full">
 <div class="grid min-h-full lg:grid-cols-[minmax(0,1.1fr)_minmax(420px,0.9fr)]">

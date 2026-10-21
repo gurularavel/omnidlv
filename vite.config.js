@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/courier.js',
                 'resources/js/tracking.js',
+                'resources/js/phone-input-entry.js',
             ],
             refresh: true,
         }),

@@ -13,7 +13,7 @@
             <form method="POST" action="{{ route('courier.login.send') }}" class="mt-8 flex flex-col gap-5">
                 @csrf
                 <x-field :label="__('Mobile phone')" name="phone">
-                    <x-input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="050 123 45 67" required autofocus class="h-14 text-[20px]" />
+                    <x-input name="phone" type="tel" data-phone inputmode="tel" autocomplete="tel" placeholder="050 123 45 67" required autofocus class="h-14 text-[20px]" />
                 </x-field>
                 <button class="btn btn-primary h-14 text-[16px]">{{ __('Send code') }}<x-icon name="arrow-right" :size="18" /></button>
             </form>

@@ -71,7 +71,7 @@
                         <x-input name="destination[name]" :value="$task->destination_name" autocomplete="off" />
                     </x-field>
                     <x-field :label="__('Phone')" name="destination[phone]" required :hint="__('Receives SMS updates and the tracking link.')">
-                        <x-input name="destination[phone]" type="tel" inputmode="tel" :value="$task->destination_phone" placeholder="050 123 45 67" />
+                        <x-input name="destination[phone]" type="tel" data-phone inputmode="tel" :value="$task->destination_phone" placeholder="050 123 45 67" />
                     </x-field>
                     <x-field :label="__('Address')" name="destination[address]" class="sm:col-span-2" required :hint="__('Street and house, district, city. Coordinates are found automatically.')">
                         <x-input name="destination[address]" :value="$task->destination_address" />

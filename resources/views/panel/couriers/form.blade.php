@@ -12,7 +12,7 @@
             <div class="flex flex-col gap-5 p-5">
                 <x-field :label="__('Full name')" name="name" required><x-input name="name" :value="$courier->name" required /></x-field>
                 <x-field :label="__('Mobile phone')" name="phone" required :hint="__('The courier signs in with an SMS code sent to this number.')">
-                    <x-input name="phone" type="tel" inputmode="tel" :value="$courier->phone" placeholder="050 123 45 67" required />
+                    <x-input name="phone" type="tel" data-phone inputmode="tel" :value="$courier->phone" placeholder="050 123 45 67" required />
                 </x-field>
                 <input type="hidden" name="phone_country" value="{{ $courier->phone_country ?? $currentCompany->country }}">
                 <x-field :label="__('Email')" name="email"><x-input name="email" type="email" :value="$courier->email" /></x-field>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Employment;
 use App\Models\User;
+use App\Rules\PhoneFormat;
 use App\Support\Phone;
 use App\Support\Plans;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:191'],
             'company' => ['required', 'string', 'max:191'],
             'email' => ['required', 'email', 'max:191', 'unique:users,email'],
-            'phone' => ['nullable', 'string', 'max:32'],
+            'phone' => ['nullable', 'string', 'max:32', new PhoneFormat],
             'password' => ['required', 'confirmed', Password::min(8)],
             'terms' => ['accepted'],
         ]);
@@ -42,7 +43,7 @@ class RegisterController extends Controller
             }
         }
 
-        $user = DB::transaction(function () use ($data, $phone, $request) {
+        $user = DB::transaction(function () use ($data, $phone) {
             // The trial runs on Scale so new companies can try proof of delivery and feedback.
             $company = Company::create([
                 'name' => $data['company'],

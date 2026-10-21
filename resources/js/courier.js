@@ -2,6 +2,9 @@ import Alpine from 'alpinejs';
 import { api, ApiError } from './courier/api';
 import { compressPhoto, keepAwake, lastKnownPoint, scanBarcode, signaturePad, startTracking, stopTracking, uploadPod } from './courier/device';
 import { createMap, transitLine, station, courierMarker, L } from './map';
+import { initPhoneInputs } from './phone-input';
+
+initPhoneInputs();
 
 window.Alpine = Alpine;
 

@@ -3,6 +3,9 @@ import focus from '@alpinejs/focus';
 import './echo';
 import { createMap, transitLine, station, interchange, courierMarker, L } from './map';
 import 'leaflet-draw'; // after ./map, which sets window.L
+import { initPhoneInputs } from './phone-input';
+
+initPhoneInputs();
 
 window.Alpine = Alpine;
 Alpine.plugin(focus);

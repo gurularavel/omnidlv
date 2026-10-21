@@ -13,7 +13,7 @@
             <x-input name="email" type="email" autocomplete="email" required />
         </x-field>
         <x-field :label="__('Phone')" name="phone" :hint="__('Optional. For example 050 123 45 67')">
-            <x-input name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+            <x-input name="phone" type="tel" data-phone autocomplete="tel" inputmode="tel" />
         </x-field>
         <div class="grid gap-5 sm:grid-cols-2">
             <x-field :label="__('Password')" name="password" required>

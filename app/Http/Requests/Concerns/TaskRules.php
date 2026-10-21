@@ -4,6 +4,7 @@ namespace App\Http\Requests\Concerns;
 
 use App\Enums\AssignmentType;
 use App\Enums\TaskType;
+use App\Rules\PhoneFormat;
 use Illuminate\Validation\Rule;
 
 /**
@@ -112,7 +113,7 @@ trait TaskRules
             "{$side}.lng" => ['nullable', 'numeric', 'between:-180,180'],
             "{$side}.name" => ['nullable', 'string', 'max:191'],
             "{$side}.phone_country" => ['nullable', 'string', 'size:2'],
-            "{$side}.phone" => [$phoneRule, 'nullable', 'string', 'max:32'],
+            "{$side}.phone" => [$phoneRule, 'nullable', 'string', 'max:32', new PhoneFormat],
             "{$side}.allow_unresolved" => ['nullable', 'boolean'],
         ];
     }

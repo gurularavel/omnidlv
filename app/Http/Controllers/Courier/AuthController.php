@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Courier;
 
 use App\Http\Controllers\Controller;
+use App\Rules\PhoneFormat;
 use App\Services\Courier\OtpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class AuthController extends Controller
 
     public function sendCode(Request $request)
     {
-        $data = $request->validate(['phone' => ['required', 'string', 'max:32']]);
+        $data = $request->validate(['phone' => ['required', 'string', 'max:32', new PhoneFormat]]);
         $demoCode = $this->otp->request($data['phone'], $request->ip());
 
         return redirect()->route('courier.verify')
@@ -42,7 +43,7 @@ class AuthController extends Controller
     public function verify(Request $request)
     {
         $data = $request->validate([
-            'phone' => ['required', 'string', 'max:32'],
+            'phone' => ['required', 'string', 'max:32', new PhoneFormat],
             'code' => ['required', 'digits:6'],
         ]);
 
