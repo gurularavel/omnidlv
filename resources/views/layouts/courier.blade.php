@@ -18,6 +18,10 @@
 <body {{ $attributes->class('theme-porcelain courier min-h-full') }}>
     {{ $slot }}
 
+    @auth
+        @include('courier.partials.nav-sheet')
+    @endauth
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('/courier-sw.js', { scope: '/courier' }).catch(() => {}));

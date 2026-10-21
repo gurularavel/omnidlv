@@ -65,7 +65,7 @@
 
                 <div class="mx-5 mt-3 grid grid-cols-2 gap-3">
                     <a :href="n.phone ? 'tel:' + n.phone : null" :aria-disabled="!n.phone" class="btn h-14 text-[14px]"><x-icon name="phone" :size="18" />{{ __('Call') }}</a>
-                    <a :href="n.navigate?.google" :aria-disabled="!n.navigate" target="_blank" rel="noopener" class="btn h-14 text-[14px]"><x-icon name="navigation" :size="18" />{{ __('Navigate') }}</a>
+                    <button type="button" :disabled="!n.navigate" @click="$store.nav.open(n.navigate)" class="btn h-14 text-[14px]"><x-icon name="navigation" :size="18" />{{ __('Navigate') }}</button>
                 </div>
             </div>
         </template>
@@ -148,6 +148,12 @@
             <p x-show="b.shift.active" class="mt-1 text-[14px] text-[var(--text-3)]" x-text="@js(__('On shift since')) + ' ' + b.shift.started_label"></p>
             <div class="mt-5 flex flex-col gap-2">
                 <button type="button" x-show="b.shift.active" class="btn h-14" :disabled="busy" @click="shift(false)">{{ __('End shift') }}</button>
+                {{-- Saved directions app; clearing it brings the choice back. --}}
+                <div x-show="$store.nav.app" class="flex items-center gap-3 rounded-md border border-[var(--hairline)] px-3 py-2">
+                    <x-icon name="navigation" :size="18" class="shrink-0 text-[var(--text-2)]" />
+                    <span class="flex-1 text-[16px]">{{ __('Directions') }}: <span class="font-semibold" x-text="$store.nav.app === 'waze' ? 'Waze' : 'Google Maps'"></span></span>
+                    <button type="button" class="btn btn-ghost h-11" @click="$store.nav.forget()">{{ __('Ask every time') }}</button>
+                </div>
                 <div class="flex gap-2">
                     @foreach (['az' => 'AZ', 'en' => 'EN', 'ru' => 'RU', 'tr' => 'TR'] as $code => $name)
                         <a href="{{ route('courier.home', ['lang' => $code]) }}" class="btn h-12 flex-1 {{ app()->getLocale() === $code ? 'border-[var(--text)]' : 'btn-ghost' }}">{{ $name }}</a>

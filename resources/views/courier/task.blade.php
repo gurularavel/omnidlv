@@ -42,9 +42,8 @@
 
             <div class="mt-4 grid grid-cols-2 gap-3">
                 <a :href="t.phone ? 'tel:' + t.phone : null" :aria-disabled="!t.phone" class="btn h-12"><x-icon name="phone" :size="18" />{{ __('Call') }}</a>
-                <a :href="t.navigate?.google" :aria-disabled="!t.navigate" target="_blank" rel="noopener" class="btn h-12"><x-icon name="navigation" :size="18" />{{ __('Navigate') }}</a>
+                <button type="button" :disabled="!t.navigate" @click="$store.nav.open(t.navigate)" class="btn h-12"><x-icon name="navigation" :size="18" />{{ __('Navigate') }}</button>
             </div>
-            <a x-show="t.navigate" :href="t.navigate?.waze" target="_blank" rel="noopener" class="mt-2 block py-2 text-center text-[14px] text-[var(--text-2)] underline">{{ __('Open in Waze') }}</a>
         </section>
 
         {{-- Requirements and money --}}

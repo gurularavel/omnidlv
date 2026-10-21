@@ -20,6 +20,53 @@ async function postJson(url, body) {
     return res.json();
 }
 
+/**
+ * Directions: Google Maps or Waze. The courier picks each time, or saves a choice on this
+ * phone (localStorage) and the button then opens that app straight away.
+ */
+const NAV_KEY = 'courier-nav-app';
+const savedNavApp = () => {
+    try {
+        const app = localStorage.getItem(NAV_KEY);
+        return ['google', 'waze'].includes(app) ? app : null;
+    } catch {
+        return null;
+    }
+};
+
+Alpine.store('nav', {
+    app: savedNavApp(),
+    links: null,
+    open(links) {
+        if (!links) return;
+        if (this.app && links[this.app]) return this.launch(links[this.app]);
+        this.links = links;
+    },
+    go(app, remember = false) {
+        if (remember) {
+            this.app = app;
+            try { localStorage.setItem(NAV_KEY, app); } catch {}
+        }
+        const url = this.links?.[app];
+        this.links = null;
+        if (url) this.launch(url);
+    },
+    forget() {
+        this.app = null;
+        try { localStorage.removeItem(NAV_KEY); } catch {}
+    },
+    close() {
+        this.links = null;
+    },
+    launch(url) {
+        // A new tab hands off to the installed app; fall back to this tab if popups are blocked.
+        // ("noopener" would make window.open return null, so the opener is cut by hand.)
+        const tab = window.open(url, '_blank');
+        if (tab) tab.opener = null;
+        else window.location.href = url;
+    },
+});
+
 /** One task: forward steps, proof of delivery, failure. */
 Alpine.data('courierTask', (initial, labels) => {
     // Non-reactive handles (canvas pad, camera stop function).
