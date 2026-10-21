@@ -95,7 +95,7 @@ class PlanController extends Controller
         abort_unless($plan->status_slug === TaskPlan::PLANNED, 422);
 
         $order = $plan->tasks()->pluck('id')->all();
-        $i = array_search($data['task_id'], $order, true);
+        $i = array_search((int) $data['task_id'], $order, true);
         $j = $data['direction'] === 'up' ? $i - 1 : $i + 1;
 
         if ($i !== false && isset($order[$j])) {

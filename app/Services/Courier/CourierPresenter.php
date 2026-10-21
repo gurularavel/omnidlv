@@ -96,6 +96,8 @@ class CourierPresenter
             'lng' => $t->{"{$target}_lng"},
             'minutes' => $minutes,
             'minutes_label' => $t->isFinal() ? Ui::localTime($t->ended_at) : Ui::minutes($minutes),
+            // From 100 minutes the label carries its own units (2s 10d), so the kicker drops "min".
+            'minutes_in_hours' => $minutes !== null && abs($minutes) >= 100,
             'urgency' => Ui::urgency($minutes),
             'window' => Ui::localTime($t->starts_at).'–'.Ui::localTime($t->ends_at),
             'cash' => $t->payment_type === 'cash' && $t->amount ? (float) $t->amount : null,

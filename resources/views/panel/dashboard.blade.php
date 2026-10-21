@@ -121,7 +121,7 @@
                                 <span class="t-value"
                                       :class="{ 'text-[var(--danger-text)]': item.urgency === 'late', 'text-[var(--risk-text)]': item.urgency === 'risk' }"
                                       x-text="item.minutes_label"></span>
-                                <span class="t-label text-[10px] text-[var(--text-3)]">{{ __('min') }}</span>
+                                <span class="t-label text-[10px] text-[var(--text-3)]" x-show="!item.minutes_in_hours">{{ __('min') }}</span>
                             </span>
                             <span class="min-w-0">
                                 <span class="flex flex-wrap items-center gap-2">

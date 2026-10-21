@@ -32,7 +32,7 @@
         <section class="px-4 pt-5">
             <div class="flex items-baseline gap-3">
                 <span class="t-display" :class="{ 'text-[var(--danger-text)]': t.urgency === 'late', 'text-[var(--risk-text)]': t.urgency === 'risk' }" x-text="t.minutes_label"></span>
-                <span class="t-label" x-text="t.final ? @js(__('finished')) : (t.urgency === 'late' ? @js(__('min late')) : @js(__('min left')))"></span>
+                <span class="t-label" x-text="t.final ? @js(__('finished')) : (t.minutes_in_hours ? (t.urgency === 'late' ? @js(__('late')) : @js(__('left'))) : (t.urgency === 'late' ? @js(__('min late')) : @js(__('min left'))))"></span>
                 <span class="ml-auto text-[var(--text-2)]" x-text="t.window"></span>
             </div>
             <h1 class="t-display mt-4 uppercase leading-[1.05]" x-text="t.target.address"></h1>

@@ -259,7 +259,7 @@ class PlanningApiTest extends TestCase
         $this->actingAs($owner)->get('/app/plans?date=2026-10-21')->assertOk()->assertSee(route('plans.show', $plan), false);
         $this->actingAs($owner)->get("/app/plans/{$plan->id}")->assertOk()->assertSee('planMap', false);
 
-        $this->actingAs($owner)->post("/app/plans/{$plan->id}/move", ['task_id' => $order[2], 'direction' => 'up'])->assertRedirect();
+        $this->actingAs($owner)->post("/app/plans/{$plan->id}/move", ['task_id' => (string) $order[2], 'direction' => 'up'] /* forms post strings */)->assertRedirect();
 
         $this->assertSame([$order[0], $order[2], $order[1]], Task::withoutGlobalScopes()->where('plan_id', $plan->id)->orderBy('route_order')->pluck('id')->all());
         $this->assertSame('manual', $plan->fresh()->solver);

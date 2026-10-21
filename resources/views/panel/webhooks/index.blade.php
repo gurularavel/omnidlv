@@ -42,7 +42,10 @@
                 </form>
 
                 @if ($endpoints->isEmpty())
-                    <x-empty icon="webhook" :title="__('webhooks.empty_title')">{{ __('webhooks.empty_body') }}</x-empty>
+                    {{-- The open form is the call to action; the explanation only shows once it is closed. --}}
+                    <div x-show="!adding" x-cloak>
+                        <x-empty icon="webhook" :title="__('webhooks.empty_title')">{{ __('webhooks.empty_body') }}</x-empty>
+                    </div>
                 @endif
 
                 <ul class="divide-y divide-[var(--hairline)]">

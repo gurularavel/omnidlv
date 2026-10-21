@@ -41,7 +41,7 @@
                 <section class="px-5 pt-4">
                     <p class="flex flex-wrap items-baseline gap-x-2">
                         <span class="t-hero" :class="{ 'text-[var(--danger-text)]': n.urgency === 'late', 'text-[var(--risk-text)]': n.urgency === 'risk' }" x-text="n.minutes_label"></span>
-                        <span class="t-label text-[14px]" x-text="n.urgency === 'late' ? @js(__('min late')) : @js(__('min left'))"></span>
+                        <span class="t-label text-[14px]" x-text="n.minutes_in_hours ? (n.urgency === 'late' ? @js(__('late')) : @js(__('left'))) : (n.urgency === 'late' ? @js(__('min late')) : @js(__('min left')))"></span>
                         {{-- A drop-off still at the pickup step goes to the hub first; say so where the time is. --}}
                         <span x-show="n.category === 'assigned' && n.type === 'drop_off'" class="tag h-7 border-[var(--text)] px-2 text-[13px] text-[var(--text)]">{{ __('Pick up first') }}</span>
                     </p>

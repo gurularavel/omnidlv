@@ -139,6 +139,7 @@ class LiveMonitor
                     'reason_label' => __('monitor.reasons.'.$reason),
                     'minutes' => $minutes,
                     'minutes_label' => Ui::minutes($minutes),
+                    'minutes_in_hours' => $minutes !== null && abs($minutes) >= 100,
                     'urgency' => Ui::urgency($minutes),
                     'recipient' => $t->destination_name,
                     'address' => Str::limit((string) $t->destination_address, 44),
