@@ -13,6 +13,7 @@ use App\Services\Routing\RoutingService;
 use App\Services\Routing\VroomSolver;
 use App\Services\Sms\SmsDriver;
 use App\Support\CurrentCompany;
+use App\Support\PlatformSettings;
 use App\View\Components\Icon;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped(CurrentCompany::class);
+
+        // Outgoing mail uses the SMTP server saved in the platform admin, read only when mail is sent.
+        $this->app->resolving('mail.manager', fn () => PlatformSettings::applyMail());
 
         $this->app->singleton(SmsDriver::class, function ($app) {
             $driver = config('services.sms.driver');

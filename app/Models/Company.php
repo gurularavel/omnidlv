@@ -42,6 +42,7 @@ class Company extends Model implements AuthenticatableContract
             'settings' => 'array',
             'trial_ends_at' => 'datetime',
             'subscription_ends_at' => 'datetime',
+            'suspended_at' => 'datetime',
         ];
     }
 
@@ -89,7 +90,24 @@ class Company extends Model implements AuthenticatableContract
 
     public function hasActiveSubscription(): bool
     {
-        return $this->onTrial() || ($this->subscription_ends_at?->isFuture() ?? false);
+        return ! $this->isSuspended() && ($this->onTrial() || ($this->subscription_ends_at?->isFuture() ?? false));
+    }
+
+    /** Suspended by the platform admin: nobody in the company can sign in or use the API. */
+    public function isSuspended(): bool
+    {
+        return $this->suspended_at !== null;
+    }
+
+    /** suspended, trial, active or expired; shown in the platform admin. */
+    public function state(): string
+    {
+        return match (true) {
+            $this->isSuspended() => 'suspended',
+            $this->onTrial() => 'trial',
+            $this->subscription_ends_at?->isFuture() ?? false => 'active',
+            default => 'expired',
+        };
     }
 
     public function plan(): array

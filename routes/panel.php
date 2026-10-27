@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Courier\AppController as CourierAppController;
 use App\Http\Controllers\Courier\AuthController as CourierAuthController;
@@ -29,8 +29,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('login', [SessionController::class, 'create'])->name('login');
     Route::post('login', [SessionController::class, 'store'])->middleware('throttle:20,1');
-    Route::get('register', [RegisterController::class, 'create'])->name('register');
-    Route::post('register', [RegisterController::class, 'store'])->middleware('throttle:10,1');
+    // No public sign-up: the platform admin creates companies in /admin.
+
+    Route::get('forgot-password', [PasswordResetController::class, 'request'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetController::class, 'email'])->middleware('throttle:6,1')->name('password.email');
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'edit'])->name('password.reset');
+    Route::post('reset-password', [PasswordResetController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
 });
 
 Route::post('logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');

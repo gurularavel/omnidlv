@@ -64,6 +64,11 @@
             </div>
         @endif
 
+        @if (auth()->user()->is_super)
+            <div class="rule my-4"></div>
+            <a href="{{ route('admin.dashboard') }}" class="nav-link"><x-icon name="shield-check" />{{ __('admin.platform') }}</a>
+        @endif
+
         <div class="mt-auto flex flex-col gap-4 px-2 pt-6">
             <div x-data="liveStatus" class="flex flex-col gap-1">
                 <span class="t-label flex items-center gap-2">
@@ -92,6 +97,14 @@
     </nav>
 
     <div class="flex min-w-0 flex-1 flex-col">
+        @if (\App\Support\Impersonation::active())
+            <div class="flex flex-wrap items-center gap-3 border-b-[1.5px] border-ink-amber/60 bg-night-950 px-4 py-2 text-[13px] lg:px-7" role="status">
+                <x-icon name="shield-check" :size="16" class="text-ink-amber" />
+                <span>{{ __('admin.users.banner', ['name' => auth()->user()->name, 'company' => $currentCompany->name]) }}</span>
+                <form method="POST" action="{{ route('admin.leave') }}" class="ml-auto">@csrf
+                    <button class="btn btn-sm"><x-icon name="arrow-left" :size="14" />{{ __('admin.users.leave') }}</button></form>
+            </div>
+        @endif
         <header class="app-header sticky top-0 z-20 flex h-16 items-center gap-4 border-b-[1.5px] border-[var(--outline)] bg-night-900/95 px-4 backdrop-blur-sm lg:px-7">
             <button class="btn btn-ghost btn-icon lg:hidden" @click="nav = true" aria-label="{{ __('Open menu') }}"><x-icon name="menu" /></button>
             <h1 class="t-title truncate">{{ $title }}</h1>
@@ -121,8 +134,12 @@
             @endif
             {{ $slot }}
         </main>
+        @unless ($fullBleed)
+            <x-site-footer class="border-t border-[var(--hairline)] px-4 py-4 lg:px-7" />
+        @endunless
     </div>
 </div>
+<x-cookie-consent />
 
 <script>
     window.OmniDLV = @js([

@@ -55,6 +55,11 @@ class CourierService
                 throw new DomainException(__('couriers.errors.already_staff'), 'already_staff');
             }
 
+            $limit = $company->plan()['max_couriers'];
+            if ($limit !== null && ! $existing?->is_active && User::query()->couriers()->count() >= $limit) {
+                throw new DomainException(__('couriers.errors.plan_limit', ['limit' => $limit]), 'plan_limit');
+            }
+
             Employment::query()->updateOrCreate(
                 ['user_id' => $user->id],
                 ['role_slug' => Role::Courier->value, 'is_active' => true],

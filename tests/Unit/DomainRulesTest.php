@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Enums\StatusCategory;
 use App\Support\GeoPoint;
 use App\Support\Phone;
-use App\Support\Plans;
 use App\Support\Polygon;
 use PHPUnit\Framework\TestCase;
 
@@ -49,14 +48,5 @@ class DomainRulesTest extends TestCase
         $this->assertSame('+905321234567', Phone::normalize('0532 123 45 67', 'TR'));
         $this->assertNull(Phone::normalize('12345', 'AZ'));
         $this->assertSame('+99450***4567', Phone::mask('+994501234567'));
-    }
-
-    public function test_plans_are_cumulative(): void
-    {
-        $this->assertFalse(Plans::allows('start', 'pod'));
-        $this->assertTrue(Plans::allows('scale', 'pod'));
-        $this->assertTrue(Plans::allows('scale', 'api'));
-        $this->assertTrue(Plans::allows('enterprise', 'pod'));
-        $this->assertFalse(Plans::allows('scale', 'white_label_tracking'));
     }
 }

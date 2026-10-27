@@ -3,7 +3,6 @@
 namespace Tests\Feature\Panel;
 
 use App\Enums\Role;
-use App\Models\Company;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\User;
@@ -13,28 +12,6 @@ use Tests\TestCase;
 
 class PanelFlowTest extends TestCase
 {
-    public function test_registration_creates_a_company_on_trial_and_signs_in(): void
-    {
-        $this->post('/register', [
-            'company' => 'Ləzzət Market',
-            'name' => 'Ülvi Rəhimov',
-            'email' => 'ulvi@example.test',
-            'phone' => '050 555 44 33',
-            'password' => 'secret-pass-1',
-            'password_confirmation' => 'secret-pass-1',
-            'terms' => '1',
-        ])->assertRedirect(route('dashboard'));
-
-        $user = User::query()->where('email', 'ulvi@example.test')->firstOrFail();
-        $company = Company::query()->findOrFail($user->active_company_id);
-
-        $this->assertAuthenticatedAs($user);
-        $this->assertSame('+994505554433', $user->phone);
-        $this->assertTrue($company->onTrial());
-        $this->assertSame(Role::Owner, $user->roleIn($company));
-        $this->get('/app')->assertOk()->assertSee('Ləzzət Market');
-    }
-
     public function test_pages_render_for_staff_and_couriers_are_kept_out(): void
     {
         $company = $this->makeCompany();

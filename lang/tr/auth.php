@@ -5,4 +5,5 @@ return [
     'password' => 'Şifre hatalı.',
     'throttle' => 'Çok fazla deneme. :seconds saniye sonra tekrar deneyin.',
     'no_company' => 'Hesabınız aktif bir şirkete bağlı değil.',
+    'company_suspended' => 'Şirket hesabı askıya alındı. Platformla iletişime geçin.',
 ];

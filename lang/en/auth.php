@@ -18,5 +18,6 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
     'no_company' => 'Your account is not linked to an active company.',
+    'company_suspended' => 'The company account is suspended. Contact the platform.',
 
 ];

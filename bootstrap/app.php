@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureCourierToken;
 use App\Http\Middleware\EnsureRole;
+use App\Http\Middleware\EnsureSuperAdmin;
 use App\Http\Middleware\NormalizeBearerToken;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetTenantFromToken;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware('web')->group(base_path('routes/panel.php'));
+            Route::middleware('web')->group(base_path('routes/admin.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -31,9 +33,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.token' => SetTenantFromToken::class,
             'role' => EnsureRole::class,
             'courier.token' => EnsureCourierToken::class,
+            'super' => EnsureSuperAdmin::class,
         ]);
 
         $middleware->prepend(TrustCloudflare::class);
+        // Set by the cookie notice in plain JS, so it is not encrypted.
+        $middleware->encryptCookies(except: ['cookie_consent']);
         $middleware->web(append: [SetLocale::class]);
         $middleware->api(prepend: [NormalizeBearerToken::class], append: [SetLocale::class]);
 

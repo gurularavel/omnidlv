@@ -93,4 +93,7 @@ return [
         'cache_days' => (int) env('GEOCODER_CACHE_DAYS', 30),
     ],
 
+    // Shown on the FAQ and legal pages when set.
+    'support_email' => env('SUPPORT_EMAIL'),
+
 ];

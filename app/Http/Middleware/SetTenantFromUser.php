@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Employment;
 use App\Models\User;
 use App\Support\CurrentCompany;
+use App\Support\Impersonation;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -31,7 +32,17 @@ class SetTenantFromUser
             ->first();
 
         if ($employment === null || $employment->company === null) {
+            // A platform admin need not work for any company; their home is the admin panel.
+            if ($user->is_super && ! $request->expectsJson()) {
+                return redirect()->route('admin.dashboard');
+            }
+
             abort(403, __('auth.no_company'));
+        }
+
+        // The platform admin may still look inside a suspended company while signed in as its staff.
+        if ($employment->company->isSuspended() && ! ($request->hasSession() && $request->session()->has(Impersonation::SESSION_KEY))) {
+            abort(403, __('auth.company_suspended'));
         }
 
         if ($user->active_company_id !== $employment->company_id) {

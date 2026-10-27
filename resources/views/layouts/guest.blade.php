@@ -66,7 +66,9 @@
                 <a href="{{ request()->fullUrlWithQuery(['lang' => $code]) }}" @class(['hover:text-[var(--text)]', 'text-[var(--text)] underline' => app()->getLocale() === $code])>{{ $name }}</a>
             @endforeach
         </div>
+        <x-site-footer class="mt-4 max-w-[400px]" />
     </main>
 </div>
+<x-cookie-consent />
 </body>
 </html>

@@ -46,7 +46,7 @@ class SessionController extends Controller
             return redirect()->route('courier.home');
         }
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route($request->user()->is_super ? 'admin.dashboard' : 'dashboard'));
     }
 
     public function destroy(Request $request)
