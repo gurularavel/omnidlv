@@ -24,7 +24,7 @@
         'cancelled' => __('analytics.outcome.cancelled'),
         'on_time' => __('analytics.figures.on_time_rate'),
     ];
-    $reasonMax = max(1, ...array_column($report['reasons'], 'count'));
+    $reasonMax = max([1, ...array_column($report['reasons'], 'count')]);
 @endphp
 <x-layouts::app :title="__('analytics.title')">
     <x-slot:actions>

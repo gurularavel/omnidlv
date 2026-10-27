@@ -113,6 +113,13 @@ class AnalyticsTest extends TestCase
         $this->actingAs($this->ali)->get('/app/analytics')->assertForbidden();
     }
 
+    public function test_the_page_opens_for_a_company_without_failures_or_cancellations(): void
+    {
+        $empty = $this->makeCompany();
+
+        $this->actingAs($this->makeStaff($empty))->get('/app/analytics')->assertOk();
+    }
+
     public function test_exports_stream_this_company_only_and_defuse_formulas(): void
     {
         $this->finish('completed', 'delivered', '2026-10-21 09:00', '2026-10-21 09:40', ['destination' => ['name' => '=HYPERLINK("x")']]);
